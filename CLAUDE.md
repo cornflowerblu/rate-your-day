@@ -21,11 +21,12 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 - **Framework**: Next.js 16 (App Router) - uses Turbopack, React 19.2
 - **Language**: TypeScript 5.1+
 - **Styling**: Tailwind CSS 4.0
-- **Database**: SQLite (development) / Azure PostgreSQL (production)
+- **Database**: Azure Cosmos DB (MongoDB API) - serverless, pay-per-request
 - **Authentication**: Microsoft Entra ID (SSO)
 - **PWA**: Service Worker, Web Push API, Background Sync
-- **Deployment**: Azure AKS (existing cluster) or Azure Container Apps (see ADR)
-- **ORM**: Prisma 7
+- **Hosting**: Vercel (Pro)
+- **Scheduler**: Azure Functions (for 9PM reminder)
+- **ORM**: Prisma 7 (with MongoDB provider)
 - **Node.js**: 20.9.0+ (required for Next.js 16)
 
 ### Version Requirements
@@ -47,6 +48,12 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 - Simpler deployment pipeline
 - Rich ecosystem for calendar/date components
 
+### Why Vercel + Cosmos DB?
+
+- **Vercel**: First-party Next.js support, Pro account available
+- **Cosmos DB MongoDB API**: Serverless pay-per-request + Prisma compatibility
+- **Cost**: Near-zero for single-user low-traffic app
+
 ## Development Commands
 
 ```bash
@@ -65,8 +72,8 @@ npm run build
 # Lint code
 npm run lint
 
-# Database migrations
-npx prisma migrate dev
+# Database - push schema to Cosmos DB (MongoDB doesn't use migrations)
+npx prisma db push
 npx prisma generate
 ```
 
@@ -79,7 +86,7 @@ rate-your-day/
 │   │   ├── page.tsx         # Home - today's rating + calendar
 │   │   ├── layout.tsx       # Root layout
 │   │   ├── manifest.ts      # PWA Web App Manifest
-│   │   └── api/             # API routes
+│   │   └── api/             # API routes (Vercel serverless functions)
 │   │       ├── ratings/     # Rating CRUD endpoints
 │   │       └── push/        # Push notification endpoints
 │   ├── components/
@@ -89,21 +96,20 @@ rate-your-day/
 │   │   ├── NotesInput.tsx   # Notes text field
 │   │   └── OfflineIndicator.tsx
 │   ├── lib/
-│   │   ├── db.ts            # Database client
+│   │   ├── db.ts            # Prisma client
 │   │   ├── types.ts         # TypeScript types
 │   │   └── push.ts          # Push notification helpers
 │   └── styles/
 │       └── globals.css      # Global styles + Tailwind
 ├── prisma/
-│   └── schema.prisma        # Database schema
+│   └── schema.prisma        # Database schema (MongoDB provider)
 ├── public/
 │   ├── icons/               # App icons (PWA)
 │   ├── sw.js                # Service Worker
 │   └── offline.html         # Offline fallback page
-├── functions/               # Azure Functions (notification scheduler)
+├── azure-functions/         # Azure Functions (notification scheduler)
 │   └── daily-reminder/
 ├── tests/
-├── Dockerfile
 ├── package.json
 └── tailwind.config.ts       # Note: Tailwind 4 uses CSS-first config
 ```
@@ -145,7 +151,7 @@ rate-your-day/
 ### 6. Daily Reminder
 - Push notification at 9PM CST if day not rated
 - Requires user permission grant
-- Server-side scheduling via Azure Functions
+- Server-side scheduling via Azure Functions (Timer Trigger)
 - Tapping notification opens today's rating view
 
 ## Authentication
@@ -174,14 +180,20 @@ User visits app
 
 ## Data Model
 
-```typescript
-interface DayRating {
-  id: string;
-  date: string;        // ISO date (YYYY-MM-DD)
-  rating: 1 | 2 | 3 | 4;  // angry=1, sad=2, average=3, happy=4
-  notes?: string;      // optional, max 280 chars
-  createdAt: DateTime;
-  updatedAt: DateTime;
+### Prisma Schema (MongoDB)
+```prisma
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model DayRating {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  date      String   @unique  // ISO date (YYYY-MM-DD)
+  rating    Int      // 1=angry, 2=sad, 3=average, 4=happy
+  notes     String?  // optional, max 280 chars
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 ```
 
@@ -213,11 +225,11 @@ interface DayRating {
 ## Environment Variables
 
 ```bash
-# Database
-DATABASE_URL=              # Database connection string
+# Database (Cosmos DB MongoDB connection string)
+DATABASE_URL=              # mongodb+srv://...
 
 # App
-NEXT_PUBLIC_APP_URL=       # Public app URL
+NEXT_PUBLIC_APP_URL=       # Public app URL (Vercel URL)
 NEXTAUTH_URL=              # NextAuth callback URL (same as app URL)
 NEXTAUTH_SECRET=           # Random secret for session encryption
 
@@ -232,33 +244,57 @@ VAPID_PRIVATE_KEY=              # Private VAPID key (server-side only)
 VAPID_SUBJECT=                  # mailto: or URL for VAPID
 ```
 
-## Deployment (Azure)
+## Deployment
 
-### Option A: Existing AKS Cluster (Preferred if resources available)
-An existing AKS cluster is available with:
-- Kustomize for configuration management
-- Istio service mesh
-- Flux for GitOps deployments
-- Sealed Secrets for encrypted secrets in Git
-- DNS already configured
+### Architecture
+```
+┌─────────────────┐     ┌──────────────────────────┐
+│     Vercel      │     │         Azure            │
+│  ┌───────────┐  │     │  ┌────────────────────┐  │
+│  │ Next.js   │  │────▶│  │ Cosmos DB          │  │
+│  │ App       │  │     │  │ (MongoDB API)      │  │
+│  └───────────┘  │     │  │ Serverless         │  │
+│                 │     │  └────────────────────┘  │
+│  ┌───────────┐  │     │                          │
+│  │ API Routes│  │     │  ┌────────────────────┐  │
+│  │ (SSR/API) │  │     │  │ Azure Functions    │  │
+│  └───────────┘  │     │  │ (Timer: 9PM CST)   │  │
+└─────────────────┘     │  └────────────────────┘  │
+                        │                          │
+                        │  ┌────────────────────┐  │
+                        │  │ Entra ID           │  │
+                        │  │ (Authentication)   │  │
+                        │  └────────────────────┘  │
+                        └──────────────────────────┘
+```
 
-**Status**: Requires investigation - cluster may have resource constraints.
-See `docs/investigations/aks-cluster-evaluation.md` for LOE assessment.
+### Vercel Setup
+- Connect GitHub repo to Vercel
+- Environment variables configured in Vercel dashboard
+- Automatic deployments on push to main
+- Preview deployments for PRs
 
-### Option B: Azure Container Apps (Fallback)
-- Auto-scaling based on HTTP traffic
-- Built-in HTTPS
-- Simpler but less control than AKS
+### Azure Resources
+- **Cosmos DB**: Create account with MongoDB API, serverless capacity
+- **Azure Functions**: Timer-triggered function for 9PM CST reminder
+- **Entra ID**: App registration for SSO
 
-See `docs/adr/002-infrastructure-azure.md` for full comparison.
+### Estimated Monthly Cost: $0-5
+- Vercel Pro: Existing subscription
+- Cosmos DB Serverless: Free tier (1000 RU/s, 25GB)
+- Azure Functions: Free tier (1M executions/month)
+
+See `docs/adr/002-infrastructure.md` for full details.
 
 ## Getting Started
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Set up database: `npx prisma migrate dev`
-4. Start development server: `npm run dev`
-5. Open http://localhost:3000
+3. Set up Cosmos DB and get connection string
+4. Configure environment variables
+5. Push Prisma schema: `npx prisma db push`
+6. Start development server: `npm run dev`
+7. Open http://localhost:3000
 
 ## Browser Support
 

@@ -179,7 +179,7 @@ Acceptance Criteria:
 - Daily reminder at 9PM CST if not rated
 - Uses Web Push API with VAPID keys
 - Requires user permission grant
-- Server-side scheduling (Azure Functions or similar)
+- Server-side scheduling via Azure Functions (Timer Trigger)
 
 ## Data Requirements
 
@@ -190,8 +190,8 @@ Acceptance Criteria:
 - Session managed via `next-auth`
 
 ### Storage
-- Cloud-first with PostgreSQL (Azure)
-- SQLite for local development
+- Azure Cosmos DB (MongoDB API) - serverless, pay-per-request
+- Prisma ORM with MongoDB provider
 - Data retention: indefinite
 - All data tied to authenticated user
 
@@ -235,13 +235,14 @@ Acceptance Criteria:
 ### M0: Project Setup
 - Next.js 16 project initialization
 - Entra ID authentication with next-auth
-- Prisma schema and database setup
+- Prisma schema with MongoDB provider
+- Cosmos DB setup (MongoDB API, serverless)
 - Basic protected route structure
 
 ### M1: Core Rating
 - Today's view with mood selector
 - Notes input
-- Save to PostgreSQL database
+- Save to Cosmos DB
 
 ### M2: Calendar View
 - Monthly calendar display
@@ -252,10 +253,10 @@ Acceptance Criteria:
 - Service Worker and Web App Manifest
 - Offline data caching and sync
 - Push notification infrastructure
-- 9PM daily reminder logic
+- Azure Functions for 9PM daily reminder
 
 ### M4: Polish & Deploy
 - Responsive design finalization
 - Accessibility audit
-- Azure deployment (AKS or Container Apps)
+- Vercel deployment + environment config
 - Performance optimization
