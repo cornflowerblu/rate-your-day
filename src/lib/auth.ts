@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id'
 
 // Debug: Log environment variables at module load time
-console.log('[AUTH DEBUG] Environment check:', {
+console.log('[AUTH DEBUG] Environment check (RAW):', {
   hasClientId: !!process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
   hasClientSecret: !!process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
   hasIssuer: !!process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER,
@@ -11,11 +11,21 @@ console.log('[AUTH DEBUG] Environment check:', {
   hasTrustHost: !!process.env.AUTH_TRUST_HOST,
   clientIdLength: process.env.AUTH_MICROSOFT_ENTRA_ID_ID?.length || 0,
   clientSecretLength: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET?.length || 0,
-  issuerValue: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER,
-  clientIdValue: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
+  issuerValue: JSON.stringify(process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER),
+  clientIdValue: JSON.stringify(process.env.AUTH_MICROSOFT_ENTRA_ID_ID),
   // Mask the secret - just show first and last 4 chars
   clientSecretMasked: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET
     ? `${process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.substring(0, 4)}...${process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.substring(process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.length - 4)}`
+    : 'undefined',
+})
+
+console.log('[AUTH DEBUG] Environment check (TRIMMED):', {
+  clientIdLength: process.env.AUTH_MICROSOFT_ENTRA_ID_ID?.trim().length || 0,
+  clientSecretLength: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET?.trim().length || 0,
+  issuerValue: JSON.stringify(process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER?.trim()),
+  clientIdValue: JSON.stringify(process.env.AUTH_MICROSOFT_ENTRA_ID_ID?.trim()),
+  clientSecretMasked: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET?.trim()
+    ? `${process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.trim().substring(0, 4)}...${process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.trim().substring(process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET.trim().length - 4)}`
     : 'undefined',
 })
 
@@ -46,16 +56,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       })
 
       // Restrict access to owner only (single user app)
-      const ownerEmail = process.env.OWNER_EMAIL
+      const ownerEmail = process.env.OWNER_EMAIL?.trim()
       if (!ownerEmail) {
         console.error('[AUTH DEBUG] OWNER_EMAIL environment variable not set')
         return false
       }
 
-      const isAuthorized = user.email === ownerEmail
+      const userEmail = user.email?.trim().toLowerCase()
+      const ownerEmailLower = ownerEmail.trim().toLowerCase()
+      const isAuthorized = userEmail === ownerEmailLower
+
       console.log('[AUTH DEBUG] Authorization check:', {
-        userEmail: user.email,
-        ownerEmail,
+        userEmailRaw: JSON.stringify(user.email),
+        userEmailTrimmed: JSON.stringify(userEmail),
+        ownerEmailRaw: JSON.stringify(process.env.OWNER_EMAIL),
+        ownerEmailTrimmed: JSON.stringify(ownerEmailLower),
+        matches: userEmail === ownerEmailLower,
         isAuthorized,
       })
 
