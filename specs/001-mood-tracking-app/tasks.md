@@ -47,18 +47,18 @@ Using Next.js App Router structure from plan.md:
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T011 Create Prisma schema with DayRating and PushSubscription models in prisma/schema.prisma
-- [ ] T012 Initialize Prisma client singleton in src/lib/db.ts
-- [ ] T013 Setup NextAuth.js configuration with Azure AD provider in src/lib/auth.ts
-- [ ] T014 Create NextAuth API route in src/app/api/auth/[...nextauth]/route.ts
-- [ ] T015 Implement authentication middleware for route protection in src/middleware.ts
-- [ ] T016 Create root layout with authentication provider in src/app/layout.tsx
-- [ ] T017 Create global styles and Tailwind imports in src/styles/globals.css
-- [ ] T018 Create TypeScript types for DayRating and PushSubscription in src/lib/types.ts
-- [ ] T019 Setup Cosmos DB connection and run npx prisma db push
-- [ ] T020 [P] Create PWA Web App Manifest in src/app/manifest.ts
-- [ ] T021 [P] Create basic Service Worker in public/sw.js with Workbox caching
-- [ ] T022 [P] Create offline fallback page in public/offline.html
+- [x] T011 Create Prisma schema with DayRating and PushSubscription models in prisma/schema.prisma
+- [x] T012 Initialize Prisma client singleton in src/lib/db.ts
+- [x] T013 Setup NextAuth.js configuration with Azure AD provider in src/lib/auth.ts
+- [x] T014 Create NextAuth API route in src/app/api/auth/[...nextauth]/route.ts
+- [x] T015 Implement authentication middleware for route protection in src/middleware.ts
+- [x] T016 Create root layout with authentication provider in src/app/layout.tsx
+- [x] T017 Create global styles and Tailwind imports in src/styles/globals.css
+- [x] T018 Create TypeScript types for DayRating and PushSubscription in src/lib/types.ts
+- [x] T019 Setup Cosmos DB connection and run npx prisma db push
+- [x] T020 [P] Create PWA Web App Manifest in src/app/manifest.ts
+- [x] T021 [P] Create basic Service Worker in public/sw.js with Workbox caching
+- [x] T022 [P] Create offline fallback page in public/offline.html
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -259,7 +259,7 @@ Using Next.js App Router structure from plan.md:
 - [ ] T107 [P] Optimize bundle size (tree-shaking, code splitting)
 - [ ] T108 [P] Add error boundaries for graceful error handling
 - [ ] T109 [P] Add analytics events (optional, if tracking desired)
-- [ ] T110 Configure Vercel environment variables (DATABASE*URL, NEXTAUTH_SECRET, AZURE_AD*_, VAPID\__)
+- [ ] T110 Configure Vercel environment variables (DATABASE*URL, NEXTAUTH_SECRET, AZURE_AD*\_, VAPID\_\_)
 - [ ] T111 Deploy to Vercel and verify production build
 - [ ] T112 Deploy Azure Function to Azure Functions App
 - [ ] T113 Test end-to-end in production environment
