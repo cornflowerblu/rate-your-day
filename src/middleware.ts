@@ -22,16 +22,11 @@ export default auth((req) => {
   }
 
   // Redirect to sign in if not logged in
+  // Note: Owner email validation is handled in the signIn callback (auth.ts)
   if (!isLoggedIn) {
     const signInUrl = new URL('/auth/signin', req.url)
     signInUrl.searchParams.set('callbackUrl', req.nextUrl.pathname)
     return NextResponse.redirect(signInUrl)
-  }
-
-  // Check if user is the owner
-  const ownerEmail = process.env.OWNER_EMAIL
-  if (ownerEmail && req.auth?.user?.email !== ownerEmail) {
-    return NextResponse.redirect(new URL('/auth/error?error=AccessDenied', req.url))
   }
 
   return NextResponse.next()

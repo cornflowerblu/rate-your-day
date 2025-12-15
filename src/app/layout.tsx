@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { SessionProvider } from 'next-auth/react'
+import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -10,6 +10,10 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: 'default',
     title: 'Rate Your Day',
+  },
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/icons/icon-192x192.svg',
   },
 }
 
@@ -22,16 +26,8 @@ export function generateViewport() {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="theme-color" content="#4F46E5" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Rate Your Day" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.svg" />
-      </head>
       <body>
-        <SessionProvider>{children}</SessionProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

@@ -1,5 +1,18 @@
 import { signIn } from '@/lib/auth'
 
+const ERROR_MESSAGES: Record<string, string> = {
+  OAuthSignin: 'Error signing in with Microsoft',
+  OAuthCallback: 'Error processing sign in',
+  OAuthCreateAccount: 'Could not create account',
+  EmailCreateAccount: 'Could not create account',
+  Callback: 'Sign in callback error',
+  OAuthAccountNotLinked: 'Account is linked to a different provider',
+  EmailSignin: 'Check your email for the sign in link',
+  CredentialsSignin: 'Sign in failed. Check your credentials',
+  SessionRequired: 'Please sign in to access this page',
+  AccessDenied: 'Access denied. You are not authorized to use this app.',
+}
+
 export default async function SignInPage({
   searchParams,
 }: {
@@ -8,6 +21,8 @@ export default async function SignInPage({
   const params = await searchParams
   const callbackUrl = params.callbackUrl || '/'
   const error = params.error
+
+  const errorMessage = error ? ERROR_MESSAGES[error] || 'Sign in error' : null
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
@@ -18,21 +33,9 @@ export default async function SignInPage({
           <p className="text-gray-600">Track your daily mood with simple emoji ratings</p>
         </div>
 
-        {error && (
+        {errorMessage && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm">
-              {error === 'OAuthSignin' && 'Error signing in with Microsoft'}
-              {error === 'OAuthCallback' && 'Error processing sign in'}
-              {error === 'OAuthCreateAccount' && 'Could not create account'}
-              {error === 'EmailCreateAccount' && 'Could not create account'}
-              {error === 'Callback' && 'Sign in callback error'}
-              {error === 'OAuthAccountNotLinked' && 'Account is linked to a different provider'}
-              {error === 'EmailSignin' && 'Check your email for the sign in link'}
-              {error === 'CredentialsSignin' && 'Sign in failed. Check your credentials'}
-              {error === 'SessionRequired' && 'Please sign in to access this page'}
-              {error === 'AccessDenied' && 'Access denied. You are not authorized to use this app.'}
-              {!error.match(/OAuth|Email|Credentials|Session|Access/) && 'Sign in error'}
-            </p>
+            <p className="text-red-800 text-sm">{errorMessage}</p>
           </div>
         )}
 

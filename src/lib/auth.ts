@@ -1,13 +1,28 @@
 import NextAuth from 'next-auth'
 import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id'
 
+// Validate and trim required environment variables
+const microsoftEntraId = process.env.AUTH_MICROSOFT_ENTRA_ID_ID
+const microsoftEntraSecret = process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET
+const microsoftEntraIssuer = process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER
+
+if (!microsoftEntraId) {
+  throw new Error('Missing required environment variable: AUTH_MICROSOFT_ENTRA_ID_ID')
+}
+if (!microsoftEntraSecret) {
+  throw new Error('Missing required environment variable: AUTH_MICROSOFT_ENTRA_ID_SECRET')
+}
+if (!microsoftEntraIssuer) {
+  throw new Error('Missing required environment variable: AUTH_MICROSOFT_ENTRA_ID_ISSUER')
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   providers: [
     MicrosoftEntraID({
-      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!.trim(),
-      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET!.trim(),
-      issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!.trim(),
+      clientId: microsoftEntraId.trim(),
+      clientSecret: microsoftEntraSecret.trim(),
+      issuer: microsoftEntraIssuer.trim(),
     }),
   ],
   callbacks: {
@@ -57,8 +72,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session, token }) {
       // Add user ID to session for database queries
-      if (session.user) {
-        session.user.id = token.sub!
+      if (session.user && token.sub) {
+        session.user.id = token.sub
       }
       return session
     },
