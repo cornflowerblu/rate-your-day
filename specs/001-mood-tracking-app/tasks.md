@@ -16,6 +16,7 @@
 ## Path Conventions
 
 Using Next.js App Router structure from plan.md:
+
 - Frontend & API: `src/app/`, `src/components/`, `src/lib/`
 - Database: `prisma/schema.prisma`
 - Tests: `tests/e2e/`, `tests/components/`
@@ -27,16 +28,16 @@ Using Next.js App Router structure from plan.md:
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Next.js 16 project with TypeScript 5.1+ and App Router in root directory
-- [ ] T002 [P] Configure Tailwind CSS 4.0 in tailwind.config.ts
-- [ ] T003 [P] Configure TypeScript strict mode in tsconfig.json
-- [ ] T004 [P] Setup ESLint and Prettier in .eslintrc.json and .prettierrc
-- [ ] T005 [P] Create environment variables template in .env.local.example
-- [ ] T006 [P] Configure next.config.js with PWA settings (next-pwa plugin)
-- [ ] T007 [P] Install core dependencies (next-auth, prisma, date-fns, web-push, idb, use-debounce)
-- [ ] T008 Create project directory structure (src/app, src/components, src/lib, prisma, public, tests)
-- [ ] T009 [P] Create PWA icons in public/icons/ (192x192, 512x512)
-- [ ] T010 [P] Setup Git hooks with Husky for pre-commit linting
+- [x] T001 Initialize Next.js 16 project with TypeScript 5.1+ and App Router in root directory
+- [x] T002 [P] Configure Tailwind CSS 4.0 in tailwind.config.ts
+- [x] T003 [P] Configure TypeScript strict mode in tsconfig.json
+- [x] T004 [P] Setup ESLint and Prettier in .eslintrc.json and .prettierrc
+- [x] T005 [P] Create environment variables template in .env.local.example
+- [x] T006 [P] Configure next.config.js with PWA settings (next-pwa plugin)
+- [x] T007 [P] Install core dependencies (next-auth, prisma, date-fns, web-push, idb, use-debounce)
+- [x] T008 Create project directory structure (src/app, src/components, src/lib, prisma, public, tests)
+- [x] T009 [P] Create PWA icons in public/icons/ (192x192, 512x512)
+- [x] T010 [P] Setup Git hooks with Husky for pre-commit linting
 
 ---
 
@@ -258,7 +259,7 @@ Using Next.js App Router structure from plan.md:
 - [ ] T107 [P] Optimize bundle size (tree-shaking, code splitting)
 - [ ] T108 [P] Add error boundaries for graceful error handling
 - [ ] T109 [P] Add analytics events (optional, if tracking desired)
-- [ ] T110 Configure Vercel environment variables (DATABASE_URL, NEXTAUTH_SECRET, AZURE_AD_*, VAPID_*)
+- [ ] T110 Configure Vercel environment variables (DATABASE*URL, NEXTAUTH_SECRET, AZURE_AD*_, VAPID\__)
 - [ ] T111 Deploy to Vercel and verify production build
 - [ ] T112 Deploy Azure Function to Azure Functions App
 - [ ] T113 Test end-to-end in production environment
@@ -299,37 +300,47 @@ Using Next.js App Router structure from plan.md:
 ### Parallel Opportunities
 
 **Setup Phase (Phase 1):**
+
 - T002, T003, T004, T005, T006, T007, T009, T010 can run in parallel
 
 **Foundational Phase (Phase 2):**
+
 - T020, T021, T022 can run in parallel (PWA setup)
 - T011-T019 must run sequentially (database and auth setup)
 
 **User Story 1:**
+
 - T023, T024 can run in parallel (component and API route)
 
 **User Story 2:**
+
 - T032, T033, T034 can run in parallel initially
 
 **User Story 3:**
+
 - T040, T041, T042 can run in parallel (components and API route)
 
 **User Story 5:**
+
 - T058, T059 can run in parallel (modal component and delete API)
 
 **User Story 6:**
+
 - T068, T069, T070, T071 can run in parallel (different files)
 
 **User Story 7:**
+
 - T079, T080 can run in parallel (indicator and offline DB)
 
 **Polish Phase:**
+
 - T098-T102 (accessibility) can run in parallel
 - T103-T105 (E2E tests) can run in parallel
 - T107, T108, T109 can run in parallel
 
 **Full Parallelization (if team has capacity):**
 After Foundational phase completes, these user stories can start in parallel:
+
 - US1 (P1)
 - US2 (P2)
 - US3 (P2)
@@ -338,6 +349,7 @@ After Foundational phase completes, these user stories can start in parallel:
 - US8 (P4) - PWA install
 
 Then after US3 completes:
+
 - US4 (P3) - Month navigation
 - US5 (P3) - Edit past days
 
