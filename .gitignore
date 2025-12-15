@@ -57,3 +57,4 @@ Thumbs.db
 # Misc
 *.log
 *.tmp
+scripts/PRODUCTION_DATABASE_URL.txt

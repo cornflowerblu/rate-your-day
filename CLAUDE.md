@@ -18,17 +18,74 @@ This project uses the [Speckit framework](https://github.com/github/spec-kit) fo
 
 **Never contradict existing ADRs or specs without explicit user approval and documentation updates.**
 
-## Important: Documentation Lookup
+## CRITICAL: Always Check MCP Documentation Before Implementation
 
-**Always consult the Context7 MCP server for the latest documentation** when working with any technology in this stack. This ensures you're using current APIs, best practices, and avoiding deprecated patterns.
+**MANDATORY: Consult MCP documentation resources BEFORE implementing ANY third-party integration or external service.**
+
+This project has access to two powerful MCP servers that provide up-to-date official documentation:
+
+1. **microsoft_docs_mcp** - Official Microsoft and Azure documentation
+   - Use for: Azure services, Microsoft Entra ID, Cosmos DB, Azure Functions, TypeScript, .NET
+   - Tools: `microsoft_docs_search`, `microsoft_code_sample_search`, `microsoft_docs_fetch`
+
+2. **context7** - Latest documentation for popular libraries and frameworks
+   - Use for: Next.js, React, Prisma, Tailwind CSS, NextAuth.js, and other npm packages
+   - Tools: `resolve-library-id`, `get-library-docs`
+
+### When to Use MCP Documentation (REQUIRED)
+
+**ALWAYS use MCP documentation in these scenarios:**
+
+1. **Before integrating any third-party service or API**
+   - Example: Before implementing Microsoft Entra ID OAuth, check microsoft_docs_mcp for:
+     - What claims are returned in the OAuth token
+     - How guest users vs native users are handled
+     - Required configuration and redirect URIs
+     - Best practices and security considerations
+
+2. **Before using unfamiliar APIs or features**
+   - Example: Before using Next.js 16 features, check context7 for breaking changes
+
+3. **When encountering unexpected behavior**
+   - Example: If OAuth returns unexpected data, check the official docs for claim structure
+
+4. **Before making assumptions about how something works**
+   - Example: Don't assume email is always returned - verify with official docs
+
+### Example: Microsoft Entra ID Integration
+
+**WRONG approach (causes hours of debugging):**
 
 ```
-# Example: Before implementing Next.js features
-Use context7 to fetch latest Next.js docs for App Router, Server Components, etc.
-
-# Example: Before writing Prisma queries
-Use context7 to verify current Prisma syntax and features
+❌ Implement OAuth based on assumptions
+❌ Assume user.email is always available
+❌ Debug for hours when guest users fail
 ```
+
+**CORRECT approach:**
+
+```
+✅ Use microsoft_docs_mcp to search "Microsoft Entra ID OAuth claims"
+✅ Read documentation about guest user authentication
+✅ Understand preferred_username format for guest users
+✅ Implement with correct claim handling from the start
+```
+
+### Quick Reference
+
+```bash
+# Before implementing Microsoft/Azure features:
+Use microsoft_docs_search with your query
+
+# Before using a library or framework:
+Use context7 resolve-library-id to find the library
+Use context7 get-library-docs to read documentation
+
+# When stuck on Microsoft/Azure issues:
+Use microsoft_docs_fetch to get full documentation pages
+```
+
+**Remember: 10 minutes reading official documentation saves hours of debugging.**
 
 ## Project Overview
 
@@ -49,14 +106,14 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 
 ### Version Requirements
 
-| Package | Minimum Version | Notes |
-|---------|-----------------|-------|
-| Node.js | 20.9.0 | Node 18 no longer supported |
-| Next.js | 16.x | Turbopack is now default |
-| React | 19.2 | View Transitions, useEffectEvent |
-| TypeScript | 5.1.0 | Required by Next.js 16 |
-| Tailwind CSS | 4.0 | CSS-first config, 5x faster builds |
-| Prisma | 7.x | Rust-free, TypeScript-based |
+| Package      | Minimum Version | Notes                              |
+| ------------ | --------------- | ---------------------------------- |
+| Node.js      | 20.9.0          | Node 18 no longer supported        |
+| Next.js      | 16.x            | Turbopack is now default           |
+| React        | 19.2            | View Transitions, useEffectEvent   |
+| TypeScript   | 5.1.0           | Required by Next.js 16             |
+| Tailwind CSS | 4.0             | CSS-first config, 5x faster builds |
+| Prisma       | 7.x             | Rust-free, TypeScript-based        |
 
 ### Why Next.js over Flask?
 
@@ -135,6 +192,7 @@ rate-your-day/
 ## Core Features
 
 ### 1. Mood Rating Selector
+
 - Four emoji faces displayed horizontally (left to right):
   - 😠 Angry (value: 1)
   - 😢 Sad (value: 2)
@@ -144,11 +202,13 @@ rate-your-day/
 - Shows current selection state clearly
 
 ### 2. Today's View
+
 - Prominently displays today's date
 - Shows current rating selection (or prompt to rate if not yet rated)
 - Notes input field below rating
 
 ### 3. Calendar View
+
 - Monthly grid showing all days
 - Each day cell displays the mood emoji for that day
 - Empty/neutral state for unrated days
@@ -156,17 +216,20 @@ rate-your-day/
 - Tap day to view/edit that day's rating and notes
 
 ### 4. Notes Feature
+
 - Small text input field (max 280 characters)
 - Associated with each day's rating
 - Optional - rating can be saved without notes
 
 ### 5. PWA & Offline Support
+
 - Installable as app on mobile and desktop
 - Works offline with cached data
 - Background sync when connection restored
 - Service Worker caches app shell and API responses
 
 ### 6. Daily Reminder
+
 - Push notification at 9PM CST if day not rated
 - Requires user permission grant
 - Server-side scheduling via Azure Functions (Timer Trigger)
@@ -175,19 +238,37 @@ rate-your-day/
 ## Authentication
 
 ### Current: Microsoft Entra ID (Single User)
+
 - SSO with Microsoft account via Entra ID (formerly Azure AD)
 - Single authorized user (owner only)
 - Uses `next-auth` with Azure AD provider
 - Protects all routes - must be authenticated to access app
+- Guest user support: Parses email from `preferred_username` claim for guest users
+
+#### Entra ID Configuration
+
+**App Registration ID**: `f77d405d-9294-471b-afe3-dd791682ab83`
+
+**Redirect URIs** (configured in Azure Portal):
+
+- `https://mood-tracker.slingshotgrp.com/api/auth/callback/microsoft-entra-id` (Production)
+- `http://localhost:3000/api/auth/callback/microsoft-entra-id` (Local development)
+- `https://rate-your-day-git-001-mood-tracking-app-roger-urich.vercel.app/api/auth/callback/microsoft-entra-id` (Branch preview)
+- `https://*.vercel.app/api/auth/callback/microsoft-entra-id` (Wildcard for all Vercel deployments)
+
+**Important**: Wildcard redirect URIs (`*.vercel.app`) are only supported for work/school accounts in an organization's Entra ID tenant. They do NOT work for personal Microsoft accounts. Our setup uses a work/school account in a custom tenant, so wildcards are supported.
 
 ### Future: Firebase Auth (Public Users)
+
 If the app needs to support public user registration:
+
 - Switch to Firebase Authentication
 - Supports email/password, Google, GitHub, etc.
 - User data isolation per account
 - See `docs/adr/003-authentication.md` for migration path (to be created)
 
 ### Auth Flow
+
 ```
 User visits app
     → Redirected to Microsoft login
@@ -199,6 +280,7 @@ User visits app
 ## Data Model
 
 ### Prisma Schema (MongoDB)
+
 ```prisma
 datasource db {
   provider = "mongodb"
@@ -217,12 +299,12 @@ model DayRating {
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/ratings?month=YYYY-MM` | Get all ratings for a month |
-| GET | `/api/ratings/:date` | Get rating for specific date |
-| POST | `/api/ratings` | Create/update rating for a date |
-| DELETE | `/api/ratings/:date` | Delete rating for a date |
+| Method | Endpoint                     | Description                     |
+| ------ | ---------------------------- | ------------------------------- |
+| GET    | `/api/ratings?month=YYYY-MM` | Get all ratings for a month     |
+| GET    | `/api/ratings/:date`         | Get rating for specific date    |
+| POST   | `/api/ratings`               | Create/update rating for a date |
+| DELETE | `/api/ratings/:date`         | Delete rating for a date        |
 
 ## UI/UX Requirements
 
@@ -265,6 +347,7 @@ VAPID_SUBJECT=                  # mailto: or URL for VAPID
 ## Deployment
 
 ### Architecture
+
 ```
 ┌─────────────────┐     ┌──────────────────────────┐
 │     Vercel      │     │         Azure            │
@@ -287,17 +370,20 @@ VAPID_SUBJECT=                  # mailto: or URL for VAPID
 ```
 
 ### Vercel Setup
+
 - Connect GitHub repo to Vercel
 - Environment variables configured in Vercel dashboard
 - Automatic deployments on push to main
 - Preview deployments for PRs
 
 ### Azure Resources
+
 - **Cosmos DB**: Create account with MongoDB API, serverless capacity
 - **Azure Functions**: Timer-triggered function for 9PM CST reminder
 - **Entra ID**: App registration for SSO
 
 ### Estimated Monthly Cost: $0-5
+
 - Vercel Pro: Existing subscription
 - Cosmos DB Serverless: Free tier (1000 RU/s, 25GB)
 - Azure Functions: Free tier (1M executions/month)
@@ -316,16 +402,18 @@ See `docs/adr/002-infrastructure.md` for full details.
 
 ## Browser Support
 
-| Browser | Minimum Version |
-|---------|-----------------|
-| Chrome | 111+ |
-| Edge | 111+ |
+| Browser | Minimum Version       |
+| ------- | --------------------- |
+| Chrome  | 111+                  |
+| Edge    | 111+                  |
 | Firefox | 128+ (for Tailwind 4) |
-| Safari | 16.4+ |
+| Safari  | 16.4+                 |
 
 ## Active Technologies
+
 - TypeScript 5.1+ with Node.js 20.9.0+ (001-mood-tracking-app)
 - Azure Cosmos DB with MongoDB API (serverless, pay-per-request) (001-mood-tracking-app)
 
 ## Recent Changes
+
 - 001-mood-tracking-app: Added TypeScript 5.1+ with Node.js 20.9.0+
