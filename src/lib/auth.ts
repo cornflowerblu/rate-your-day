@@ -49,11 +49,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
+        const extendedProfile = profile as Record<string, unknown> | undefined
         console.log('[AUTH DEBUG] signIn callback triggered:', {
           userEmail: user.email,
+          userName: user.name,
+          profileEmail: profile?.email,
+          profileMail: extendedProfile?.mail,
+          profileUserPrincipalName: extendedProfile?.userPrincipalName,
+          profilePreferredUsername: extendedProfile?.preferred_username,
           accountProvider: account?.provider,
           accountType: account?.type,
           hasProfile: !!profile,
+          profileKeys: profile ? Object.keys(profile) : [],
         })
 
         // Restrict access to owner only (single user app)
