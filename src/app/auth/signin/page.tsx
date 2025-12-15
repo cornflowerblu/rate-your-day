@@ -1,12 +1,13 @@
 import { signIn } from '@/lib/auth'
 
-export default function SignInPage({
+export default async function SignInPage({
   searchParams,
 }: {
-  searchParams: { callbackUrl?: string; error?: string }
+  searchParams: Promise<{ callbackUrl?: string; error?: string }>
 }) {
-  const callbackUrl = searchParams.callbackUrl || '/'
-  const error = searchParams.error
+  const params = await searchParams
+  const callbackUrl = params.callbackUrl || '/'
+  const error = params.error
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
@@ -43,9 +44,9 @@ export default function SignInPage({
         >
           <button
             type="submit"
-            className="w-full bg-[#2F2F2F] hover:bg-[#1F1F1F] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-3"
+            className="w-full bg-white hover:bg-gray-50 text-gray-700 font-medium py-2.5 px-4 rounded-lg border border-gray-300 transition-colors duration-200 flex items-center justify-center gap-2 text-sm shadow-sm"
           >
-            <svg className="w-5 h-5" viewBox="0 0 21 21" fill="none">
+            <svg className="w-4 h-4" viewBox="0 0 21 21" fill="none">
               <rect x="1" y="1" width="9" height="9" fill="#f25022" />
               <rect x="11" y="1" width="9" height="9" fill="#00a4ef" />
               <rect x="1" y="11" width="9" height="9" fill="#7fba00" />

@@ -6,12 +6,17 @@ export const metadata: Metadata = {
   title: 'Rate Your Day',
   description: 'Track your daily mood with simple emoji ratings',
   manifest: '/manifest.json',
-  themeColor: '#4F46E5',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Rate Your Day',
   },
+}
+
+export function generateViewport() {
+  return {
+    themeColor: '#4F46E5',
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
