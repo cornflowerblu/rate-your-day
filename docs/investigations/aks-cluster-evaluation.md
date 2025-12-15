@@ -11,6 +11,7 @@ An existing AKS cluster is available with:
 - Kustomize configuration management
 - Istio service mesh
 - Flux GitOps deployments
+- Sealed Secrets for encrypted secrets in Git
 - DNS already configured
 
 However, the cluster has been experiencing **resource issues** that need evaluation.
@@ -41,11 +42,12 @@ Estimated requirements for Next.js 16 app:
 
 **Total needed**: ~300m-1500m CPU, 384Mi-1536Mi memory
 
-### 4. Istio/Flux Health Check
+### 4. Istio/Flux/Sealed Secrets Health Check
 - [ ] Verify Istio control plane is healthy: `istioctl analyze`
 - [ ] Check Flux status: `flux check`
 - [ ] Verify existing GitOps repos are syncing
 - [ ] Check Istio ingress gateway is functional
+- [ ] Verify Sealed Secrets controller is running: `kubectl get pods -n kube-system -l name=sealed-secrets-controller`
 
 ### 5. Options if Resources Constrained
 
@@ -82,6 +84,10 @@ kubectl get pods -n istio-system
 flux check
 flux get all -A
 
+# Sealed Secrets health
+kubectl get pods -n kube-system -l name=sealed-secrets-controller
+kubeseal --version
+
 # Resource quotas
 kubectl get resourcequotas -A
 ```
@@ -110,6 +116,10 @@ kubectl get resourcequotas -A
 - Kustomize controller: TBD
 - Existing repos: TBD
 
+### Sealed Secrets Status
+- Controller running: TBD
+- kubeseal version: TBD
+
 ## Recommendation
 **Pending investigation completion**
 
@@ -120,10 +130,11 @@ kubectl get resourcequotas -A
 |------|----------|
 | Write Kustomize base manifests | 2-4 hours |
 | Create dev/prod overlays | 1-2 hours |
+| Create Sealed Secrets for env vars | 1 hour |
 | Configure Istio VirtualService | 1 hour |
 | Set up Flux GitRepository + Kustomization | 1-2 hours |
 | Testing and validation | 2-4 hours |
-| **Total** | **7-13 hours** |
+| **Total** | **8-14 hours** |
 
 ### If AKS needs fixes first:
 | Task | Estimate |
@@ -131,8 +142,8 @@ kubectl get resourcequotas -A
 | Scale node pool | 30 min |
 | OR Remove unused workloads | 2-4 hours |
 | OR Enable autoscaler | 1 hour |
-| + Base deployment work | 7-13 hours |
-| **Total** | **8-17 hours** |
+| + Base deployment work | 8-14 hours |
+| **Total** | **9-18 hours** |
 
 ### If switching to Container Apps:
 | Task | Estimate |

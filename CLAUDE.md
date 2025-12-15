@@ -239,6 +239,7 @@ An existing AKS cluster is available with:
 - Kustomize for configuration management
 - Istio service mesh
 - Flux for GitOps deployments
+- Sealed Secrets for encrypted secrets in Git
 - DNS already configured
 
 **Status**: Requires investigation - cluster may have resource constraints.

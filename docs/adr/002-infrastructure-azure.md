@@ -23,6 +23,7 @@ The existing AKS cluster already has:
 - **Kustomize** - Configuration management
 - **Istio** - Service mesh (traffic management, mTLS, observability)
 - **Flux** - GitOps continuous delivery
+- **Sealed Secrets** - Encrypted secrets safe to store in Git
 - **DNS** - Already configured
 
 ### Advantages of Using Existing AKS
@@ -32,6 +33,7 @@ The existing AKS cluster already has:
 | Infrastructure cost | Already paid for (sunk cost) |
 | DNS/Ingress | Already configured with Istio |
 | GitOps | Flux already set up for deployments |
+| Secrets management | Sealed Secrets for GitOps-safe secrets |
 | Observability | Istio provides metrics, tracing |
 | Security | mTLS between services via Istio |
 | Team familiarity | Existing operational knowledge |
@@ -75,10 +77,22 @@ k8s/
 │   └── istio-virtualservice.yaml
 └── overlays/
     ├── dev/
-    │   └── kustomization.yaml
+    │   ├── kustomization.yaml
+    │   └── sealedsecret.yaml    # Encrypted secrets for dev
     └── prod/
-        └── kustomization.yaml
+        ├── kustomization.yaml
+        └── sealedsecret.yaml    # Encrypted secrets for prod
 ```
+
+### Secrets Management with Sealed Secrets
+Sensitive values (DATABASE_URL, AZURE_AD_CLIENT_SECRET, VAPID keys, etc.) are encrypted using `kubeseal` and stored safely in Git:
+
+```bash
+# Encrypt a secret for the cluster
+kubeseal --format yaml < secret.yaml > sealedsecret.yaml
+```
+
+Only the cluster's Sealed Secrets controller can decrypt these values.
 
 ### Known Concerns
 - **Resource constraints** reported on the cluster
@@ -100,6 +114,7 @@ k8s/
 | Setup effort | Medium (manifests) | Low |
 | DNS setup | Done | New setup needed |
 | GitOps | Flux ready | GitHub Actions |
+| Secrets | Sealed Secrets (Git-safe) | Azure Key Vault refs |
 | Service mesh | Istio included | Not available |
 | Operational overhead | Shared with cluster | Minimal |
 
@@ -137,3 +152,4 @@ k8s/
 - [Flux GitOps](https://fluxcd.io/docs/)
 - [Istio on AKS](https://learn.microsoft.com/en-us/azure/aks/istio-about)
 - [Kustomize](https://kustomize.io/)
+- [Sealed Secrets](https://sealed-secrets.netlify.app/)
