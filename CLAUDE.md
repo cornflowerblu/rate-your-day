@@ -243,6 +243,20 @@ rate-your-day/
 - Single authorized user (owner only)
 - Uses `next-auth` with Azure AD provider
 - Protects all routes - must be authenticated to access app
+- Guest user support: Parses email from `preferred_username` claim for guest users
+
+#### Entra ID Configuration
+
+**App Registration ID**: `f77d405d-9294-471b-afe3-dd791682ab83`
+
+**Redirect URIs** (configured in Azure Portal):
+
+- `https://mood-tracker.slingshotgrp.com/api/auth/callback/microsoft-entra-id` (Production)
+- `http://localhost:3000/api/auth/callback/microsoft-entra-id` (Local development)
+- `https://rate-your-day-git-001-mood-tracking-app-roger-urich.vercel.app/api/auth/callback/microsoft-entra-id` (Branch preview)
+- `https://*.vercel.app/api/auth/callback/microsoft-entra-id` (Wildcard for all Vercel deployments)
+
+**Important**: Wildcard redirect URIs (`*.vercel.app`) are only supported for work/school accounts in an organization's Entra ID tenant. They do NOT work for personal Microsoft accounts. Our setup uses a work/school account in a custom tenant, so wildcards are supported.
 
 ### Future: Firebase Auth (Public Users)
 
