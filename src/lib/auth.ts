@@ -49,19 +49,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        const extendedProfile = profile as Record<string, unknown> | undefined
-        console.log('[AUTH DEBUG] signIn callback triggered:', {
-          userEmail: user.email,
-          userName: user.name,
-          profileEmail: profile?.email,
-          profileMail: extendedProfile?.mail,
-          profileUserPrincipalName: extendedProfile?.userPrincipalName,
-          profilePreferredUsername: extendedProfile?.preferred_username,
-          accountProvider: account?.provider,
-          accountType: account?.type,
-          hasProfile: !!profile,
-          profileKeys: profile ? Object.keys(profile) : [],
-        })
+        console.log('[AUTH DEBUG] signIn callback triggered')
+        console.log('[AUTH DEBUG] User:', JSON.stringify(user))
+        console.log('[AUTH DEBUG] Account:', JSON.stringify(account))
+        console.log('[AUTH DEBUG] Profile:', JSON.stringify(profile))
 
         // Restrict access to owner only (single user app)
         const ownerEmail = process.env.OWNER_EMAIL?.trim()
@@ -70,21 +61,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return false
         }
 
-        if (!user.email) {
-          console.error('[AUTH DEBUG] User email is missing from OAuth response')
+        // Extract email from user object or profile
+        // For guest users, email might be in preferred_username as: rogeru63_gmail.com#EXT#@tenant
+        let userEmail = user.email
+        const extendedProfile = profile as Record<string, unknown> | undefined
+
+        if (!userEmail && extendedProfile?.preferred_username) {
+          const preferredUsername = String(extendedProfile.preferred_username)
+          // Parse guest user format: rogeru63_gmail.com#EXT#@tenant -> rogeru63@gmail.com
+          if (preferredUsername.includes('#EXT#')) {
+            const emailPart = preferredUsername.split('#EXT#')[0]
+            userEmail = emailPart.replace(/_/g, '@')
+          } else {
+            userEmail = preferredUsername
+          }
+        }
+
+        if (!userEmail) {
+          console.error('[AUTH DEBUG] User email could not be determined from OAuth response')
           return false
         }
 
-        const userEmail = user.email.trim().toLowerCase()
+        const userEmailLower = userEmail.trim().toLowerCase()
         const ownerEmailLower = ownerEmail.trim().toLowerCase()
-        const isAuthorized = userEmail === ownerEmailLower
+        const isAuthorized = userEmailLower === ownerEmailLower
 
         console.log('[AUTH DEBUG] Authorization check:', {
           userEmailRaw: JSON.stringify(user.email),
-          userEmailTrimmed: JSON.stringify(userEmail),
+          userEmailParsed: JSON.stringify(userEmail),
+          userEmailLower: JSON.stringify(userEmailLower),
           ownerEmailRaw: JSON.stringify(process.env.OWNER_EMAIL),
-          ownerEmailTrimmed: JSON.stringify(ownerEmailLower),
-          matches: userEmail === ownerEmailLower,
+          ownerEmailLower: JSON.stringify(ownerEmailLower),
+          matches: userEmailLower === ownerEmailLower,
           isAuthorized,
         })
 
