@@ -55,7 +55,7 @@ Acceptance Criteria:
 > As a user, I want to see a calendar view of the current month so that I can see my mood patterns.
 
 Acceptance Criteria:
-- [ ] Standard month grid layout (Sun-Sat or Mon-Sun configurable)
+- [ ] Standard month grid layout (Sunday-Saturday)
 - [ ] Each day shows the mood emoji if rated
 - [ ] Unrated days show empty/neutral state
 - [ ] Today is visually highlighted
@@ -78,6 +78,36 @@ Acceptance Criteria:
 - [ ] Shows date, rating emoji, and notes
 - [ ] Can edit rating and notes for past days
 - [ ] Close/dismiss to return to calendar
+
+### PWA & Notifications
+
+**US-7: Daily Reminder Notification**
+> As a user, I want to receive a reminder at 9PM if I haven't rated my day so that I don't forget to log my mood.
+
+Acceptance Criteria:
+- [ ] Push notification sent at 9PM CST if no rating exists for today
+- [ ] Notification only sent if user has granted permission
+- [ ] Tapping notification opens the app to today's rating view
+- [ ] No notification if today is already rated
+
+**US-8: Offline Support**
+> As a user, I want to rate my day even when offline so that I can log my mood anywhere.
+
+Acceptance Criteria:
+- [ ] App loads from cache when offline (PWA)
+- [ ] Can view cached calendar data offline
+- [ ] Can create/edit ratings while offline
+- [ ] Changes sync automatically when back online
+- [ ] Visual indicator when offline
+
+**US-9: Install as App**
+> As a user, I want to install the app on my device so that I can access it quickly like a native app.
+
+Acceptance Criteria:
+- [ ] "Add to Home Screen" prompt available
+- [ ] App icon and splash screen configured
+- [ ] Launches in standalone mode (no browser chrome)
+- [ ] Works on both iOS and Android
 
 ## UI Components
 
@@ -138,6 +168,19 @@ Acceptance Criteria:
 - Tablet: 768px - 1023px
 - Desktop: 1024px+
 
+### PWA Requirements
+- Service Worker for offline caching
+- Web App Manifest with icons and theme colors
+- Background sync for offline data
+- Push notifications via Web Push API
+- Installable on mobile and desktop
+
+### Notification System
+- Daily reminder at 9PM CST if not rated
+- Uses Web Push API with VAPID keys
+- Requires user permission grant
+- Server-side scheduling (Azure Functions or similar)
+
 ## Data Requirements
 
 ### Authentication
@@ -164,17 +207,21 @@ Acceptance Criteria:
 - Multi-user support
 - Data export
 - Mood analytics/insights
-- Push notifications/reminders
 - Sharing functionality
 - Custom emoji sets
 - Weekly/yearly views
+- Configurable timezone (v1 uses CST)
+- Edit history tracking
 
-## Open Questions
+## Decisions
 
-1. **Week start day**: Should calendar start on Sunday or Monday? (Make configurable?)
-2. **Timezone handling**: How to handle users who travel across timezones?
-3. **Edit history**: Should we track when ratings are modified?
-4. **Offline support**: PWA with offline capability in v1 or defer?
+| Question | Decision | Notes |
+|----------|----------|-------|
+| Week start day | Sunday | No configuration needed |
+| Timezone | CST (America/Chicago) | Configurable in v2 |
+| Edit history | Defer to v2 | Track `updatedAt` but no audit log |
+| Offline/PWA | Yes, v1 | Required for push notifications |
+| Reminder time | 9PM CST | Push notification if not rated |
 
 ## Success Metrics
 
@@ -201,7 +248,13 @@ Acceptance Criteria:
 - Navigate between months
 - View past day details
 
-### M3: Polish & Deploy
+### M3: PWA & Notifications
+- Service Worker and Web App Manifest
+- Offline data caching and sync
+- Push notification infrastructure
+- 9PM daily reminder logic
+
+### M4: Polish & Deploy
 - Responsive design finalization
 - Accessibility audit
 - Azure deployment (AKS or Container Apps)

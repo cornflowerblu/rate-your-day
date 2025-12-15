@@ -23,6 +23,7 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 - **Styling**: Tailwind CSS 4.0
 - **Database**: SQLite (development) / Azure PostgreSQL (production)
 - **Authentication**: Microsoft Entra ID (SSO)
+- **PWA**: Service Worker, Web Push API, Background Sync
 - **Deployment**: Azure AKS (existing cluster) or Azure Container Apps (see ADR)
 - **ORM**: Prisma 7
 - **Node.js**: 20.9.0+ (required for Next.js 16)
@@ -77,22 +78,30 @@ rate-your-day/
 │   ├── app/                 # Next.js App Router pages
 │   │   ├── page.tsx         # Home - today's rating + calendar
 │   │   ├── layout.tsx       # Root layout
+│   │   ├── manifest.ts      # PWA Web App Manifest
 │   │   └── api/             # API routes
-│   │       └── ratings/     # Rating CRUD endpoints
+│   │       ├── ratings/     # Rating CRUD endpoints
+│   │       └── push/        # Push notification endpoints
 │   ├── components/
 │   │   ├── MoodSelector.tsx # Emoji rating selector
 │   │   ├── Calendar.tsx     # Monthly calendar view
 │   │   ├── DayCell.tsx      # Individual calendar day
-│   │   └── NotesInput.tsx   # Notes text field
+│   │   ├── NotesInput.tsx   # Notes text field
+│   │   └── OfflineIndicator.tsx
 │   ├── lib/
 │   │   ├── db.ts            # Database client
-│   │   └── types.ts         # TypeScript types
+│   │   ├── types.ts         # TypeScript types
+│   │   └── push.ts          # Push notification helpers
 │   └── styles/
 │       └── globals.css      # Global styles + Tailwind
 ├── prisma/
 │   └── schema.prisma        # Database schema
 ├── public/
-│   └── icons/               # Mood emoji assets
+│   ├── icons/               # App icons (PWA)
+│   ├── sw.js                # Service Worker
+│   └── offline.html         # Offline fallback page
+├── functions/               # Azure Functions (notification scheduler)
+│   └── daily-reminder/
 ├── tests/
 ├── Dockerfile
 ├── package.json
@@ -126,6 +135,18 @@ rate-your-day/
 - Small text input field (max 280 characters)
 - Associated with each day's rating
 - Optional - rating can be saved without notes
+
+### 5. PWA & Offline Support
+- Installable as app on mobile and desktop
+- Works offline with cached data
+- Background sync when connection restored
+- Service Worker caches app shell and API responses
+
+### 6. Daily Reminder
+- Push notification at 9PM CST if day not rated
+- Requires user permission grant
+- Server-side scheduling via Azure Functions
+- Tapping notification opens today's rating view
 
 ## Authentication
 
@@ -204,6 +225,11 @@ NEXTAUTH_SECRET=           # Random secret for session encryption
 AZURE_AD_CLIENT_ID=        # App registration client ID
 AZURE_AD_CLIENT_SECRET=    # App registration client secret
 AZURE_AD_TENANT_ID=        # Azure tenant ID (or 'common' for multi-tenant)
+
+# Push Notifications (VAPID)
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=   # Public VAPID key (client-side)
+VAPID_PRIVATE_KEY=              # Private VAPID key (server-side only)
+VAPID_SUBJECT=                  # mailto: or URL for VAPID
 ```
 
 ## Deployment (Azure)
