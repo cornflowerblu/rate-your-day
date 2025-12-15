@@ -48,34 +48,48 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log('[AUTH DEBUG] signIn callback triggered:', {
-        userEmail: user.email,
-        accountProvider: account?.provider,
-        accountType: account?.type,
-        hasProfile: !!profile,
-      })
+      try {
+        console.log('[AUTH DEBUG] signIn callback triggered:', {
+          userEmail: user.email,
+          accountProvider: account?.provider,
+          accountType: account?.type,
+          hasProfile: !!profile,
+        })
 
-      // Restrict access to owner only (single user app)
-      const ownerEmail = process.env.OWNER_EMAIL?.trim()
-      if (!ownerEmail) {
-        console.error('[AUTH DEBUG] OWNER_EMAIL environment variable not set')
+        // Restrict access to owner only (single user app)
+        const ownerEmail = process.env.OWNER_EMAIL?.trim()
+        if (!ownerEmail) {
+          console.error('[AUTH DEBUG] OWNER_EMAIL environment variable not set')
+          return false
+        }
+
+        if (!user.email) {
+          console.error('[AUTH DEBUG] User email is missing from OAuth response')
+          return false
+        }
+
+        const userEmail = user.email.trim().toLowerCase()
+        const ownerEmailLower = ownerEmail.trim().toLowerCase()
+        const isAuthorized = userEmail === ownerEmailLower
+
+        console.log('[AUTH DEBUG] Authorization check:', {
+          userEmailRaw: JSON.stringify(user.email),
+          userEmailTrimmed: JSON.stringify(userEmail),
+          ownerEmailRaw: JSON.stringify(process.env.OWNER_EMAIL),
+          ownerEmailTrimmed: JSON.stringify(ownerEmailLower),
+          matches: userEmail === ownerEmailLower,
+          isAuthorized,
+        })
+
+        if (!isAuthorized) {
+          console.error('[AUTH DEBUG] Access denied - user email does not match owner email')
+        }
+
+        return isAuthorized
+      } catch (error) {
+        console.error('[AUTH DEBUG] Exception in signIn callback:', error)
         return false
       }
-
-      const userEmail = user.email?.trim().toLowerCase()
-      const ownerEmailLower = ownerEmail.trim().toLowerCase()
-      const isAuthorized = userEmail === ownerEmailLower
-
-      console.log('[AUTH DEBUG] Authorization check:', {
-        userEmailRaw: JSON.stringify(user.email),
-        userEmailTrimmed: JSON.stringify(userEmail),
-        ownerEmailRaw: JSON.stringify(process.env.OWNER_EMAIL),
-        ownerEmailTrimmed: JSON.stringify(ownerEmailLower),
-        matches: userEmail === ownerEmailLower,
-        isAuthorized,
-      })
-
-      return isAuthorized
     },
     async session({ session, token }) {
       console.log('[AUTH DEBUG] session callback triggered:', {
