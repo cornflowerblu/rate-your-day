@@ -1,5 +1,23 @@
 # CLAUDE.md - Project Guide for rate-your-day
 
+## Important: This is a Speckit Project
+
+**CRITICAL: Always consult existing specifications before starting any work.**
+
+This project uses the [Speckit framework](https://github.com/github/spec-kit) for structured feature development. Before implementing any feature or making architecture decisions:
+
+1. **Check `specs/` directory** for existing feature specifications
+2. **Check `docs/adr/` directory** for Architecture Decision Records:
+   - [ADR 001: Framework Selection](docs/adr/001-framework-selection.md) - Next.js 16+ with App Router
+   - [ADR 002: Infrastructure](docs/adr/002-infrastructure.md) - Vercel + Azure Cosmos DB + Azure Functions
+3. **Follow the speckit workflow**:
+   - `/speckit.specify` - Create feature specification (WHAT and WHY)
+   - `/speckit.plan` - Generate implementation plan (HOW)
+   - `/speckit.tasks` - Break down into tasks
+   - `/speckit.implement` - Execute implementation
+
+**Never contradict existing ADRs or specs without explicit user approval and documentation updates.**
+
 ## Important: Documentation Lookup
 
 **Always consult the Context7 MCP server for the latest documentation** when working with any technology in this stack. This ensures you're using current APIs, best practices, and avoiding deprecated patterns.
@@ -304,3 +322,10 @@ See `docs/adr/002-infrastructure.md` for full details.
 | Edge | 111+ |
 | Firefox | 128+ (for Tailwind 4) |
 | Safari | 16.4+ |
+
+## Active Technologies
+- TypeScript 5.1+ with Node.js 20.9.0+ (001-mood-tracking-app)
+- Azure Cosmos DB with MongoDB API (serverless, pay-per-request) (001-mood-tracking-app)
+
+## Recent Changes
+- 001-mood-tracking-app: Added TypeScript 5.1+ with Node.js 20.9.0+
