@@ -22,6 +22,7 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 - **Language**: TypeScript 5.1+
 - **Styling**: Tailwind CSS 4.0
 - **Database**: SQLite (development) / Azure PostgreSQL (production)
+- **Authentication**: Microsoft Entra ID (SSO)
 - **Deployment**: Azure AKS (existing cluster) or Azure Container Apps (see ADR)
 - **ORM**: Prisma 7
 - **Node.js**: 20.9.0+ (required for Next.js 16)
@@ -126,6 +127,30 @@ rate-your-day/
 - Associated with each day's rating
 - Optional - rating can be saved without notes
 
+## Authentication
+
+### Current: Microsoft Entra ID (Single User)
+- SSO with Microsoft account via Entra ID (formerly Azure AD)
+- Single authorized user (owner only)
+- Uses `next-auth` with Azure AD provider
+- Protects all routes - must be authenticated to access app
+
+### Future: Firebase Auth (Public Users)
+If the app needs to support public user registration:
+- Switch to Firebase Authentication
+- Supports email/password, Google, GitHub, etc.
+- User data isolation per account
+- See `docs/adr/003-authentication.md` for migration path (to be created)
+
+### Auth Flow
+```
+User visits app
+    → Redirected to Microsoft login
+    → Entra ID validates credentials
+    → Returns to app with session
+    → All API routes check session
+```
+
 ## Data Model
 
 ```typescript
@@ -167,8 +192,18 @@ interface DayRating {
 ## Environment Variables
 
 ```bash
-DATABASE_URL=           # Database connection string
-NEXT_PUBLIC_APP_URL=    # Public app URL
+# Database
+DATABASE_URL=              # Database connection string
+
+# App
+NEXT_PUBLIC_APP_URL=       # Public app URL
+NEXTAUTH_URL=              # NextAuth callback URL (same as app URL)
+NEXTAUTH_SECRET=           # Random secret for session encryption
+
+# Microsoft Entra ID
+AZURE_AD_CLIENT_ID=        # App registration client ID
+AZURE_AD_CLIENT_SECRET=    # App registration client secret
+AZURE_AD_TENANT_ID=        # Azure tenant ID (or 'common' for multi-tenant)
 ```
 
 ## Deployment (Azure)

@@ -6,9 +6,15 @@ A simple, delightful mood tracking app that lets users quickly rate their day wi
 
 ## Target Users
 
-- Anyone wanting to track daily mood/well-being
-- Users who want a quick, frictionless daily check-in
-- People interested in identifying emotional patterns
+### v1: Single User (Owner)
+- Personal mood tracking app
+- Authenticated via Microsoft Entra ID (SSO)
+- No registration required - owner's Microsoft account only
+
+### Future: Public Users
+- Open registration via Firebase Auth
+- Multi-user support with data isolation
+- See authentication roadmap in CLAUDE.md
 
 ## User Stories
 
@@ -134,19 +140,27 @@ Acceptance Criteria:
 
 ## Data Requirements
 
+### Authentication
+- Microsoft Entra ID (Azure AD) for SSO
+- Single authorized user (owner's Microsoft account)
+- Protected routes - all pages require authentication
+- Session managed via `next-auth`
+
 ### Storage
-- Single user (no auth in v1)
-- Local-first with cloud sync capability
+- Cloud-first with PostgreSQL (Azure)
+- SQLite for local development
 - Data retention: indefinite
+- All data tied to authenticated user
 
 ### Privacy
-- No personal data collected beyond ratings
-- Data stored per-device in v1
-- Future: optional cloud backup with user consent
+- No personal data collected beyond ratings and notes
+- Data stored in Azure (owner's tenant)
+- Microsoft account email used for user identification
+- No third-party data sharing
 
 ## Out of Scope (v1)
 
-- User authentication/accounts
+- Public user registration (Firebase Auth - future)
 - Multi-user support
 - Data export
 - Mood analytics/insights
@@ -171,10 +185,16 @@ Acceptance Criteria:
 
 ## Milestones
 
+### M0: Project Setup
+- Next.js 16 project initialization
+- Entra ID authentication with next-auth
+- Prisma schema and database setup
+- Basic protected route structure
+
 ### M1: Core Rating
 - Today's view with mood selector
 - Notes input
-- Save to local database
+- Save to PostgreSQL database
 
 ### M2: Calendar View
 - Monthly calendar display
@@ -184,5 +204,5 @@ Acceptance Criteria:
 ### M3: Polish & Deploy
 - Responsive design finalization
 - Accessibility audit
-- Azure deployment
+- Azure deployment (AKS or Container Apps)
 - Performance optimization
