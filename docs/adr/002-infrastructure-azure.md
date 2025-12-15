@@ -1,44 +1,109 @@
-# ADR 002: Infrastructure - Azure Container Apps
+# ADR 002: Infrastructure - Azure Deployment Strategy
 
 ## Status
-Accepted
+**Pending Investigation** - Awaiting AKS cluster resource evaluation
 
 ## Context
 We need to deploy the Rate Your Day application to Azure. The available options are:
-1. **Azure Kubernetes Service (AKS)** - Existing K8s cluster
-2. **Azure Container Apps** - Serverless containers
+1. **Azure Kubernetes Service (AKS)** - Existing cluster with full GitOps setup
+2. **Azure Container Apps** - Serverless containers (fallback option)
 3. **Azure Static Web Apps** - Static hosting with serverless functions
 4. **Azure App Service** - Traditional PaaS
 
 ## Decision
-We will use **Azure Container Apps** for deployment.
+**Pending** - Evaluate existing AKS cluster viability first. See `docs/investigations/aks-cluster-evaluation.md`.
 
-## Rationale
+If AKS has sufficient resources → Use existing AKS cluster
+If AKS is resource-constrained → Use Azure Container Apps
 
-### Why Container Apps over AKS
+## Option A: Existing AKS Cluster (Preferred)
 
-| Factor | Container Apps | AKS |
-|--------|----------------|-----|
-| Operational overhead | Minimal | High |
-| Scaling | Automatic | Manual config |
-| Cost model | Pay per use | Always-on cluster |
-| Complexity | Simple | Complex |
-| Learning curve | Low | High |
+### Available Infrastructure
+The existing AKS cluster already has:
+- **Kustomize** - Configuration management
+- **Istio** - Service mesh (traffic management, mTLS, observability)
+- **Flux** - GitOps continuous delivery
+- **DNS** - Already configured
 
-For a simple mood tracking app, AKS is overkill. Container Apps provides:
-- Automatic scaling (including scale to zero)
-- Built-in HTTPS and ingress
-- Simple CI/CD integration
-- No cluster management
+### Advantages of Using Existing AKS
 
-### Why Container Apps over Static Web Apps
+| Factor | Benefit |
+|--------|---------|
+| Infrastructure cost | Already paid for (sunk cost) |
+| DNS/Ingress | Already configured with Istio |
+| GitOps | Flux already set up for deployments |
+| Observability | Istio provides metrics, tracing |
+| Security | mTLS between services via Istio |
+| Team familiarity | Existing operational knowledge |
 
-Static Web Apps would work for a purely static frontend, but:
-- We need server-side database access
-- API routes benefit from container flexibility
-- Easier to add background jobs later if needed
+### Architecture (AKS)
 
-### Architecture
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Existing AKS Cluster                      │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                 Istio Service Mesh                     │  │
+│  │  ┌─────────────────┐    ┌─────────────────────────┐   │  │
+│  │  │ Istio Ingress   │───▶│  rate-your-day          │   │  │
+│  │  │ Gateway         │    │  (Deployment + Service) │   │  │
+│  │  │ (DNS configured)│    │  - Next.js 16 container │   │  │
+│  │  └─────────────────┘    └─────────────────────────┘   │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                              │                               │
+│  ┌───────────────────────────▼───────────────────────────┐  │
+│  │                    Flux GitOps                         │  │
+│  │  Watches: github.com/*/rate-your-day/k8s/             │  │
+│  │  Applies: Kustomize overlays per environment          │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│            Azure Database for PostgreSQL                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Required K8s Manifests
+
+```
+k8s/
+├── base/
+│   ├── kustomization.yaml
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── configmap.yaml
+│   └── istio-virtualservice.yaml
+└── overlays/
+    ├── dev/
+    │   └── kustomization.yaml
+    └── prod/
+        └── kustomization.yaml
+```
+
+### Known Concerns
+- **Resource constraints** reported on the cluster
+- Need to verify available CPU/memory
+- May need to scale node pool or evict unused workloads
+
+## Option B: Azure Container Apps (Fallback)
+
+### When to Choose This Option
+- AKS cluster cannot accommodate the workload
+- Cluster resource issues cannot be resolved quickly
+- Simpler deployment is preferred over leveraging existing infra
+
+### Comparison
+
+| Factor | AKS (Existing) | Container Apps |
+|--------|----------------|----------------|
+| Incremental cost | ~$0 (existing) | ~$15-25/month |
+| Setup effort | Medium (manifests) | Low |
+| DNS setup | Done | New setup needed |
+| GitOps | Flux ready | GitHub Actions |
+| Service mesh | Istio included | Not available |
+| Operational overhead | Shared with cluster | Minimal |
+
+### Architecture (Container Apps)
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -61,54 +126,14 @@ Static Web Apps would work for a purely static frontend, but:
 └─────────────────────────────────────────────────┘
 ```
 
-### Cost Estimate (Low Traffic)
+## Next Steps
 
-| Resource | Estimated Monthly Cost |
-|----------|----------------------|
-| Container Apps (scale to zero) | $0-10 |
-| PostgreSQL Flexible (B1ms) | ~$15 |
-| **Total** | **~$15-25/month** |
-
-## Consequences
-
-### Positive
-- Zero infrastructure management
-- Cost-effective for low traffic
-- Simple deployment via GitHub Actions
-- Automatic HTTPS certificates
-- Easy environment management (staging/prod)
-
-### Negative
-- Less control than AKS
-- Cold start latency when scaled to zero
-- Vendor lock-in to Azure Container Apps
-
-### Mitigations
-- Cold starts: Configure minimum replicas=1 if latency is critical
-- Vendor lock-in: Dockerfile-based deployment is portable
-
-## Implementation Notes
-
-### Deployment Pipeline
-```yaml
-# .github/workflows/deploy.yml (simplified)
-- Build Docker image
-- Push to Azure Container Registry
-- Deploy to Container Apps via az containerapp up
-```
-
-### Environment Configuration
-- Development: SQLite local database
-- Staging: Container Apps + PostgreSQL (shared)
-- Production: Container Apps + PostgreSQL (dedicated)
-
-## Future Considerations
-
-If the app grows significantly:
-- Consider AKS migration for cost optimization at scale
-- Add Azure CDN for static assets
-- Implement Azure Front Door for global distribution
+1. **Investigate AKS cluster** - See `docs/investigations/aks-cluster-evaluation.md`
+2. **Decision point** - Choose AKS or Container Apps based on findings
+3. **Implementation** - Create deployment manifests for chosen platform
 
 ## References
 - [Azure Container Apps Overview](https://learn.microsoft.com/en-us/azure/container-apps/overview)
-- [Container Apps Pricing](https://azure.microsoft.com/en-us/pricing/details/container-apps/)
+- [Flux GitOps](https://fluxcd.io/docs/)
+- [Istio on AKS](https://learn.microsoft.com/en-us/azure/aks/istio-about)
+- [Kustomize](https://kustomize.io/)

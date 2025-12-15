@@ -1,17 +1,41 @@
 # CLAUDE.md - Project Guide for rate-your-day
 
+## Important: Documentation Lookup
+
+**Always consult the Context7 MCP server for the latest documentation** when working with any technology in this stack. This ensures you're using current APIs, best practices, and avoiding deprecated patterns.
+
+```
+# Example: Before implementing Next.js features
+Use context7 to fetch latest Next.js docs for App Router, Server Components, etc.
+
+# Example: Before writing Prisma queries
+Use context7 to verify current Prisma syntax and features
+```
+
 ## Project Overview
 
 Rate Your Day is a mood tracking application where users rate their daily experience using an emoji-based scale. The app displays the current day's rating selection and provides a calendar view showing historical ratings across the month, with optional notes for each entry.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14+ (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Framework**: Next.js 16 (App Router) - uses Turbopack, React 19.2
+- **Language**: TypeScript 5.1+
+- **Styling**: Tailwind CSS 4.0
 - **Database**: SQLite (development) / Azure PostgreSQL (production)
-- **Deployment**: Azure Container Apps (serverless)
-- **ORM**: Prisma
+- **Deployment**: Azure AKS (existing cluster) or Azure Container Apps (see ADR)
+- **ORM**: Prisma 7
+- **Node.js**: 20.9.0+ (required for Next.js 16)
+
+### Version Requirements
+
+| Package | Minimum Version | Notes |
+|---------|-----------------|-------|
+| Node.js | 20.9.0 | Node 18 no longer supported |
+| Next.js | 16.x | Turbopack is now default |
+| React | 19.2 | View Transitions, useEffectEvent |
+| TypeScript | 5.1.0 | Required by Next.js 16 |
+| Tailwind CSS | 4.0 | CSS-first config, 5x faster builds |
+| Prisma | 7.x | Rust-free, TypeScript-based |
 
 ### Why Next.js over Flask?
 
@@ -27,7 +51,7 @@ Rate Your Day is a mood tracking application where users rate their daily experi
 # Install dependencies
 npm install
 
-# Run development server
+# Run development server (uses Turbopack by default in Next.js 16)
 npm run dev
 
 # Run tests
@@ -71,7 +95,7 @@ rate-your-day/
 ├── tests/
 ├── Dockerfile
 ├── package.json
-└── tailwind.config.ts
+└── tailwind.config.ts       # Note: Tailwind 4 uses CSS-first config
 ```
 
 ## Core Features
@@ -149,10 +173,22 @@ NEXT_PUBLIC_APP_URL=    # Public app URL
 
 ## Deployment (Azure)
 
-Target: Azure Container Apps (serverless containers)
+### Option A: Existing AKS Cluster (Preferred if resources available)
+An existing AKS cluster is available with:
+- Kustomize for configuration management
+- Istio service mesh
+- Flux for GitOps deployments
+- DNS already configured
+
+**Status**: Requires investigation - cluster may have resource constraints.
+See `docs/investigations/aks-cluster-evaluation.md` for LOE assessment.
+
+### Option B: Azure Container Apps (Fallback)
 - Auto-scaling based on HTTP traffic
 - Built-in HTTPS
-- Easy CI/CD with GitHub Actions
+- Simpler but less control than AKS
+
+See `docs/adr/002-infrastructure-azure.md` for full comparison.
 
 ## Getting Started
 
@@ -161,3 +197,12 @@ Target: Azure Container Apps (serverless containers)
 3. Set up database: `npx prisma migrate dev`
 4. Start development server: `npm run dev`
 5. Open http://localhost:3000
+
+## Browser Support
+
+| Browser | Minimum Version |
+|---------|-----------------|
+| Chrome | 111+ |
+| Edge | 111+ |
+| Firefox | 128+ (for Tailwind 4) |
+| Safari | 16.4+ |
