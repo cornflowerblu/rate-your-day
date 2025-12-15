@@ -322,3 +322,10 @@ See `docs/adr/002-infrastructure.md` for full details.
 | Edge | 111+ |
 | Firefox | 128+ (for Tailwind 4) |
 | Safari | 16.4+ |
+
+## Active Technologies
+- TypeScript 5.1+ with Node.js 20.9.0+ (001-mood-tracking-app)
+- Azure Cosmos DB with MongoDB API (serverless, pay-per-request) (001-mood-tracking-app)
+
+## Recent Changes
+- 001-mood-tracking-app: Added TypeScript 5.1+ with Node.js 20.9.0+

@@ -1,0 +1,372 @@
+openapi: 3.0.3
+info:
+  title: Rate Your Day API
+  description: REST API for mood tracking application
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://rate-your-day.vercel.app/api
+    description: Production (Vercel)
+  - url: http://localhost:3000/api
+    description: Local development
+
+security:
+  - sessionAuth: []
+
+paths:
+  /ratings:
+    get:
+      summary: Get ratings for a specific month
+      operationId: getRatings
+      tags:
+        - Ratings
+      parameters:
+        - name: month
+          in: query
+          required: true
+          description: Month in YYYY-MM format
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}$'
+            example: '2025-12'
+      responses:
+        '200':
+          description: List of ratings for the month
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DayRating'
+              example:
+                - date: '2025-12-01'
+                  rating: 3
+                  notes: 'Normal day at work'
+                  createdAt: '2025-12-01T20:15:00.000Z'
+                  updatedAt: '2025-12-01T20:15:00.000Z'
+                - date: '2025-12-02'
+                  rating: 4
+                  notes: 'Great progress on project!'
+                  createdAt: '2025-12-02T21:30:00.000Z'
+                  updatedAt: '2025-12-02T21:30:00.000Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /ratings/{date}:
+    get:
+      summary: Get rating for a specific date
+      operationId: getRatingByDate
+      tags:
+        - Ratings
+      parameters:
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '200':
+          description: Rating for the specified date
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayRating'
+              example:
+                date: '2025-12-15'
+                rating: 4
+                notes: 'Finished implementation plan'
+                createdAt: '2025-12-15T20:00:00.000Z'
+                updatedAt: '2025-12-15T20:00:00.000Z'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      summary: Create or update rating for a date
+      operationId: upsertRating
+      tags:
+        - Ratings
+      parameters:
+        - $ref: '#/components/parameters/dateParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingInput'
+            examples:
+              withNotes:
+                summary: Rating with notes
+                value:
+                  rating: 4
+                  notes: 'Amazing day!'
+              withoutNotes:
+                summary: Rating without notes
+                value:
+                  rating: 3
+      responses:
+        '200':
+          description: Rating updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayRating'
+        '201':
+          description: Rating created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DayRating'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      summary: Delete rating for a specific date
+      operationId: deleteRating
+      tags:
+        - Ratings
+      parameters:
+        - $ref: '#/components/parameters/dateParam'
+      responses:
+        '204':
+          description: Rating deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /push/subscribe:
+    post:
+      summary: Subscribe to push notifications
+      operationId: subscribeToPush
+      tags:
+        - Push Notifications
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushSubscriptionInput'
+            example:
+              endpoint: 'https://fcm.googleapis.com/fcm/send/...'
+              keys:
+                p256dh: 'BNcRd...'
+                auth: 'tBHI...'
+      responses:
+        '200':
+          description: Subscription created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Successfully subscribed to notifications'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /push/unsubscribe:
+    post:
+      summary: Unsubscribe from push notifications
+      operationId: unsubscribeFromPush
+      tags:
+        - Push Notifications
+      responses:
+        '200':
+          description: Successfully unsubscribed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 'Successfully unsubscribed from notifications'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: next-auth.session-token
+      description: NextAuth.js session cookie (set automatically after login)
+
+  parameters:
+    dateParam:
+      name: date
+      in: path
+      required: true
+      description: Date in YYYY-MM-DD format
+      schema:
+        type: string
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        example: '2025-12-15'
+
+  schemas:
+    DayRating:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date in YYYY-MM-DD format
+          example: '2025-12-15'
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 4
+          description: 'Mood rating: 1=angry, 2=sad, 3=average, 4=happy'
+          example: 4
+        notes:
+          type: string
+          maxLength: 280
+          description: Optional notes (max 280 characters)
+          example: 'Had a great day working on the project!'
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: '2025-12-15T20:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2025-12-15T20:00:00.000Z'
+      required:
+        - date
+        - rating
+        - createdAt
+        - updatedAt
+
+    RatingInput:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 4
+          description: 'Mood rating: 1=angry, 2=sad, 3=average, 4=happy'
+          example: 4
+        notes:
+          type: string
+          maxLength: 280
+          description: Optional notes (max 280 characters)
+          example: 'Amazing progress today!'
+          nullable: true
+      required:
+        - rating
+
+    PushSubscriptionInput:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          description: Push service endpoint URL
+          example: 'https://fcm.googleapis.com/fcm/send/...'
+        keys:
+          type: object
+          properties:
+            p256dh:
+              type: string
+              description: Public key for encryption
+              example: 'BNcRd...'
+            auth:
+              type: string
+              description: Authentication secret
+              example: 'tBHI...'
+          required:
+            - p256dh
+            - auth
+      required:
+        - endpoint
+        - keys
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: 'Invalid date format'
+        code:
+          type: string
+          description: Error code
+          example: 'INVALID_INPUT'
+      required:
+        - error
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Rating must be between 1 and 4'
+            code: 'INVALID_RATING'
+
+    Unauthorized:
+      description: Unauthorized - authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Authentication required'
+            code: 'UNAUTHORIZED'
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'Rating not found for date'
+            code: 'NOT_FOUND'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: 'An unexpected error occurred'
+            code: 'INTERNAL_ERROR'
+
+tags:
+  - name: Ratings
+    description: Operations for managing daily mood ratings
+  - name: Push Notifications
+    description: Operations for managing push notification subscriptions
