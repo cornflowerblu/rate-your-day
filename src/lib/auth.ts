@@ -23,9 +23,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   providers: [
     MicrosoftEntraID({
-      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!,
-      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET!,
-      issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!,
+      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!.trim(),
+      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET!.trim(),
+      issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!.trim(),
     }),
   ],
   events: {
