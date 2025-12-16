@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import MoodSelector from '@/components/MoodSelector'
+import NotesInput from '@/components/NotesInput'
 import OfflineIndicator from '@/components/OfflineIndicator'
 import NotificationButton from '@/components/NotificationButton'
 import { MoodLevel, RatingResponse } from '@/lib/types'
@@ -10,6 +11,7 @@ import { savePendingRating, getCachedRating, cacheRating, isOnline } from '@/lib
 
 export default function Home() {
   const [selectedMood, setSelectedMood] = useState<MoodLevel | null>(null)
+  const [notes, setNotes] = useState<string>('')
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -42,6 +44,7 @@ export default function Home() {
 
             const data: RatingResponse = await response.json()
             setSelectedMood(data.rating)
+            setNotes(data.notes || '')
 
             // Cache the rating for offline access
             await cacheRating(today, data.rating, data.notes || undefined)
@@ -55,8 +58,10 @@ export default function Home() {
         const cachedRating = await getCachedRating(today)
         if (cachedRating) {
           setSelectedMood(cachedRating.rating)
+          setNotes(cachedRating.notes || '')
         } else {
           setSelectedMood(null)
+          setNotes('')
         }
       } catch (err) {
         console.error('Error fetching rating:', err)
@@ -82,6 +87,7 @@ export default function Home() {
               if (response.ok) {
                 const data: RatingResponse = await response.json()
                 setSelectedMood(data.rating)
+                setNotes(data.notes || '')
                 await cacheRating(today, data.rating, data.notes || undefined)
               }
             } catch (err) {
@@ -171,6 +177,42 @@ export default function Home() {
     }
   }
 
+  // Handle notes save with auto-save
+  const handleNotesSave = async (newNotes: string) => {
+    try {
+      // If no rating selected yet, just update local state
+      if (!selectedMood) {
+        setNotes(newNotes)
+        return
+      }
+
+      // If online, save to server
+      if (isOnline()) {
+        const response = await fetch(`/api/ratings/${today}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ rating: selectedMood, notes: newNotes }),
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to save notes')
+        }
+
+        // Cache the updated rating with notes
+        await cacheRating(today, selectedMood, newNotes || undefined)
+      } else {
+        // Offline: save to IndexedDB for later sync
+        await savePendingRating(today, selectedMood, newNotes || undefined)
+      }
+    } catch (err) {
+      console.error('Error saving notes:', err)
+      // Still update local state even if save fails
+      setNotes(newNotes)
+    }
+  }
+
   if (isLoading) {
     return (
       <main className="min-h-screen p-8 flex items-center justify-center">
@@ -232,6 +274,23 @@ export default function Home() {
             <p className="mt-6 text-center text-gray-600 dark:text-gray-400 text-sm">
               Tap another emoji to change your rating
             </p>
+          )}
+
+          {/* Notes Input - Show when mood is selected */}
+          {selectedMood && (
+            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-medium mb-4 text-gray-900 dark:text-gray-100">
+                Add Notes (Optional)
+              </h3>
+              <NotesInput
+                value={notes}
+                onChange={setNotes}
+                onSave={handleNotesSave}
+                disabled={isSaving}
+                maxLength={280}
+                autoSaveDelay={1000}
+              />
+            </div>
           )}
         </div>
 

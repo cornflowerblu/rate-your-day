@@ -72,15 +72,15 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 1
 
-- [ ] T023 [P] [US1] Create MoodSelector component in src/components/MoodSelector.tsx
-- [ ] T024 [P] [US1] Create API route GET /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
-- [ ] T025 [US1] Create API route POST /api/ratings/[date] for upserting ratings in src/app/api/ratings/[date]/route.ts
-- [ ] T026 [US1] Implement today's date display and rating view in src/app/page.tsx
-- [ ] T027 [US1] Add immediate save logic on emoji click in MoodSelector component
-- [ ] T028 [US1] Add visual feedback for selected emoji (highlight state)
-- [ ] T029 [US1] Implement rating change functionality (tap different emoji)
-- [ ] T030 [US1] Add loading state while saving rating
-- [ ] T031 [US1] Add error handling for failed saves with user feedback
+- [x] T023 [P] [US1] Create MoodSelector component in src/components/MoodSelector.tsx
+- [x] T024 [P] [US1] Create API route GET /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
+- [x] T025 [US1] Create API route POST /api/ratings/[date] for upserting ratings in src/app/api/ratings/[date]/route.ts
+- [x] T026 [US1] Implement today's date display and rating view in src/app/page.tsx
+- [x] T027 [US1] Add immediate save logic on emoji click in MoodSelector component
+- [x] T028 [US1] Add visual feedback for selected emoji (highlight state)
+- [x] T029 [US1] Implement rating change functionality (tap different emoji)
+- [x] T030 [US1] Add loading state while saving rating
+- [x] T031 [US1] Add error handling for failed saves with user feedback
 
 **Checkpoint**: At this point, User Story 1 should be fully functional - users can rate their day and see the rating persist
 
@@ -94,14 +94,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 2
 
-- [ ] T032 [P] [US2] Create NotesInput component with character counter in src/components/NotesInput.tsx
-- [ ] T033 [US2] Implement debounced auto-save hook using use-debounce in NotesInput
-- [ ] T034 [US2] Update POST /api/ratings/[date] to accept notes field
-- [ ] T035 [US2] Add notes field to today's page view in src/app/page.tsx below MoodSelector
-- [ ] T036 [US2] Implement 280 character limit with input validation
-- [ ] T037 [US2] Add character count display (e.g., "45/280")
-- [ ] T038 [US2] Add visual feedback during auto-save (e.g., "Saving..." indicator)
-- [ ] T039 [US2] Handle paste events that exceed 280 characters (truncate)
+- [x] T032 [P] [US2] Create NotesInput component with character counter in src/components/NotesInput.tsx
+- [x] T033 [US2] Implement debounced auto-save hook using use-debounce in NotesInput
+- [x] T034 [US2] Update POST /api/ratings/[date] to accept notes field
+- [x] T035 [US2] Add notes field to today's page view in src/app/page.tsx below MoodSelector
+- [x] T036 [US2] Implement 280 character limit with input validation
+- [x] T037 [US2] Add character count display (e.g., "45/280")
+- [x] T038 [US2] Add visual feedback during auto-save (e.g., "Saving..." indicator)
+- [x] T039 [US2] Handle paste events that exceed 280 characters (truncate)
 
 **Checkpoint**: Users can now add notes to their ratings with automatic saving
 
@@ -115,9 +115,9 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 3
 
-- [ ] T040 [P] [US3] Create Calendar component in src/components/Calendar.tsx
-- [ ] T041 [P] [US3] Create DayCell component for individual calendar days in src/components/DayCell.tsx
-- [ ] T042 [P] [US3] Create API route GET /api/ratings?month=YYYY-MM in src/app/api/ratings/route.ts
+- [x] T040 [P] [US3] Create Calendar component in src/components/Calendar.tsx
+- [x] T041 [P] [US3] Create DayCell component for individual calendar days in src/components/DayCell.tsx
+- [x] T042 [P] [US3] Create API route GET /api/ratings?month=YYYY-MM in src/app/api/ratings/route.ts
 - [ ] T043 [US3] Implement calendar grid generation using date-fns (eachDayOfInterval, startOfMonth, endOfMonth)
 - [ ] T044 [US3] Add calendar to page below today's rating in src/app/page.tsx
 - [ ] T045 [US3] Implement emoji rendering on rated days in DayCell
