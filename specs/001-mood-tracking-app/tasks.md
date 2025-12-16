@@ -189,7 +189,7 @@ Using Next.js App Router structure from plan.md:
 - [x] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
 - [x] T073 [US6] Add permission request UI component in src/app/page.tsx
 - [x] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
-- [x] T075 [US6] Store push subscription in database via /api/push/subscribe
+- [x] T075 [US6] Store push subscrip`tion in database via /api/push/subscribe
 - [x] T076 [US6] Implement notification sending in Azure Function using web-push
 - [x] T077 [US6] Add notification click handler in Service Worker to open app
 - [x] T078 [US6] Test notification at 9 PM CST (2 AM UTC) using Timer Trigger schedule
