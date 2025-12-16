@@ -159,16 +159,16 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 5
 
-- [ ] T058 [P] [US5] Create DayDetailModal component in src/components/DayDetailModal.tsx
-- [ ] T059 [P] [US5] Create API route DELETE /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
-- [ ] T060 [US5] Add click handler to DayCell for rated days
-- [ ] T061 [US5] Implement modal open/close state management
-- [ ] T062 [US5] Display selected day's date, rating, and notes in modal
-- [ ] T063 [US5] Add MoodSelector to modal for editing rating
-- [ ] T064 [US5] Add NotesInput to modal for editing notes
-- [ ] T065 [US5] Implement save on rating/notes change in modal
-- [ ] T066 [US5] Add close/dismiss button to return to calendar
-- [ ] T067 [US5] Update calendar display when modal closes (refresh ratings)
+- [x] T058 [P] [US5] Create DayDetailModal component in src/components/DayDetailModal.tsx
+- [x] T059 [P] [US5] Create API route DELETE /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
+- [x] T060 [US5] Add click handler to DayCell for rated days
+- [x] T061 [US5] Implement modal open/close state management
+- [x] T062 [US5] Display selected day's date, rating, and notes in modal
+- [x] T063 [US5] Add MoodSelector to modal for editing rating
+- [x] T064 [US5] Add NotesInput to modal for editing notes
+- [x] T065 [US5] Implement save on rating/notes change in modal
+- [x] T066 [US5] Add close/dismiss button to return to calendar
+- [x] T067 [US5] Update calendar display when modal closes (refresh ratings)
 
 **Checkpoint**: Users can review and edit any past day's rating and notes
 
