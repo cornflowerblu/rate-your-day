@@ -44,17 +44,17 @@ export default function DayCell({ date, rating, isCurrentMonth, onDayClick }: Da
   return (
     <div
       className={`
-        relative
+        group relative
         aspect-square
         flex flex-col items-center justify-center
         p-2
-        rounded-lg
-        transition-all duration-200
-        ${isCurrentDay ? 'ring-2 ring-indigo-500 ring-offset-2' : ''}
+        rounded-xl
+        transition-all duration-200 ease-out
+        ${isCurrentDay ? 'ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900 bg-primary-50 dark:bg-primary-950/20' : 'bg-gray-50 dark:bg-gray-800/50'}
         ${!isCurrentMonth ? 'opacity-30' : ''}
-        ${isFutureDate ? 'opacity-40 cursor-not-allowed' : ''}
-        ${isClickable && !isFutureDate ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-95' : ''}
-        ${isClickable && !isFutureDate ? 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500' : ''}
+        ${isFutureDate ? 'opacity-40 cursor-not-allowed grayscale' : ''}
+        ${isClickable && !isFutureDate ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:shadow-soft hover:scale-105 active:scale-95' : ''}
+        ${isClickable && !isFutureDate ? 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500' : ''}
       `}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
@@ -66,9 +66,11 @@ export default function DayCell({ date, rating, isCurrentMonth, onDayClick }: Da
       {/* Day number */}
       <span
         className={`
-          text-sm font-medium mb-1
-          ${isCurrentDay ? 'text-indigo-600 dark:text-indigo-400 font-bold' : 'text-gray-700 dark:text-gray-300'}
+          text-xs sm:text-sm font-semibold mb-1
+          transition-colors duration-200
+          ${isCurrentDay ? 'text-primary-700 dark:text-primary-400 font-bold text-base' : 'text-gray-700 dark:text-gray-300'}
           ${isFutureDate ? 'text-gray-400 dark:text-gray-600' : ''}
+          ${isClickable && !isFutureDate ? 'group-hover:text-gray-900 dark:group-hover:text-gray-100' : ''}
         `}
       >
         {dayNumber}
@@ -76,8 +78,12 @@ export default function DayCell({ date, rating, isCurrentMonth, onDayClick }: Da
 
       {/* Mood emoji display */}
       {mood && !isFutureDate && (
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-2xl sm:text-3xl" role="img" aria-label={mood.label}>
+        <div className="flex flex-col items-center gap-1 transition-transform duration-200 group-hover:scale-110">
+          <span
+            className="text-xl sm:text-3xl filter drop-shadow-sm"
+            role="img"
+            aria-label={mood.label}
+          >
             {mood.emoji}
           </span>
         </div>
@@ -85,12 +91,17 @@ export default function DayCell({ date, rating, isCurrentMonth, onDayClick }: Da
 
       {/* Empty state for unrated days (subtle indicator) */}
       {!mood && !isFutureDate && isCurrentMonth && (
-        <div className="w-2 h-2 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="w-2.5 h-2.5 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-200 group-hover:bg-gray-400 dark:group-hover:bg-gray-500 group-hover:scale-125" />
       )}
 
-      {/* Today indicator (subtle dot at the top) */}
+      {/* Today indicator (pulse animation) */}
       {isCurrentDay && (
-        <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-indigo-500" />
+        <div className="absolute top-1.5 right-1.5">
+          <div className="relative">
+            <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse-soft" />
+            <div className="absolute inset-0 w-2 h-2 rounded-full bg-primary-500 animate-ping opacity-75" />
+          </div>
+        </div>
       )}
     </div>
   )

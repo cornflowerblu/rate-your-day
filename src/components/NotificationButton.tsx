@@ -111,36 +111,81 @@ export default function NotificationButton() {
 
   if (permission === 'denied') {
     return (
-      <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <p className="text-yellow-800 dark:text-yellow-200 text-sm">
-          🔔 Notifications are blocked. Please enable them in your browser settings to get daily
-          reminders.
-        </p>
+      <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl shadow-sm animate-fade-in">
+        <div className="flex items-start gap-3">
+          <svg
+            className="w-5 h-5 text-yellow-600 dark:text-yellow-400 mt-0.5 flex-shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <p className="text-yellow-800 dark:text-yellow-200 text-sm font-medium text-left">
+            Notifications are blocked. Please enable them in your browser settings to get daily
+            reminders.
+          </p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="text-center">
+    <div className="text-center space-y-3">
       {isSubscribed ? (
         <button
           onClick={unsubscribeFromPush}
           disabled={isLoading}
-          className="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? 'Updating...' : '🔕 Disable Daily Reminders'}
+          {isLoading ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 dark:border-gray-300 border-t-transparent"></div>
+              <span>Updating...</span>
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+              </svg>
+              <span>Disable Daily Reminders</span>
+            </>
+          )}
         </button>
       ) : (
         <button
           onClick={subscribeToPush}
           disabled={isLoading}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
         >
-          {isLoading ? 'Enabling...' : '🔔 Enable Daily Reminders'}
+          {isLoading ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white"></div>
+              <span>Enabling...</span>
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+              </svg>
+              <span>Enable Daily Reminders</span>
+            </>
+          )}
         </button>
       )}
-      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-        Get a notification at 9 PM CST if you haven't rated your day
+      <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center gap-2">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>Get reminded at 9 PM CST if you haven't rated your day</span>
       </p>
     </div>
   )

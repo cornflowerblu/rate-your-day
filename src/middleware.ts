@@ -11,6 +11,7 @@ export default auth((req) => {
     req.nextUrl.pathname === '/favicon.svg' ||
     req.nextUrl.pathname === '/favicon.ico' ||
     req.nextUrl.pathname === '/manifest.json' ||
+    req.nextUrl.pathname === '/manifest.webmanifest' ||
     req.nextUrl.pathname.startsWith('/icons') ||
     req.nextUrl.pathname === '/sw.js' ||
     req.nextUrl.pathname === '/offline.html' ||

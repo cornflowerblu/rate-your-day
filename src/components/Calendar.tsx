@@ -97,27 +97,27 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Month and Year Header */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
       </div>
 
       {/* Error message */}
       {error && (
-        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl animate-slide-in-down">
+          <p className="text-sm text-red-800 dark:text-red-200 font-medium">{error}</p>
         </div>
       )}
 
       {/* Calendar Grid */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4">
+      <div className="card-elevated p-5 sm:p-6">
         {/* Week day headers */}
-        <div className="grid grid-cols-7 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-3">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="text-center text-sm font-semibold text-gray-600 dark:text-gray-400 py-2"
+              className="text-center text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-500 py-2"
             >
               {day}
             </div>
@@ -126,17 +126,17 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
 
         {/* Loading skeleton */}
         {isLoading ? (
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
             {Array.from({ length: 35 }).map((_, index) => (
               <div
                 key={index}
-                className="aspect-square rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse"
+                className="aspect-square rounded-xl bg-gray-100 dark:bg-gray-800 shimmer"
               />
             ))}
           </div>
         ) : (
           /* Calendar days grid */
-          <div className="grid grid-cols-7 gap-2" role="grid">
+          <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
             {calendarDays.map((date) => {
               const dateString = format(date, 'yyyy-MM-dd')
               const rating = ratings[dateString]
@@ -156,9 +156,17 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
         )}
       </div>
 
-      {/* Legend (optional - helps users understand the colors) */}
-      <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-        <p>Tap a day to view or edit your rating</p>
+      {/* Legend */}
+      <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <p>Tap any day to view or edit your rating</p>
       </div>
     </div>
   )
