@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import MoodSelector from '@/components/MoodSelector'
 import NotesInput from '@/components/NotesInput'
+import Calendar from '@/components/Calendar'
 import OfflineIndicator from '@/components/OfflineIndicator'
 import NotificationButton from '@/components/NotificationButton'
 import { MoodLevel, RatingResponse } from '@/lib/types'
@@ -294,17 +295,20 @@ export default function Home() {
           )}
         </div>
 
+        {/* Monthly Calendar View */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
+            Your Mood Calendar
+          </h2>
+          <Calendar />
+        </div>
+
         {/* Notification Settings */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-8">
           <h2 className="text-xl font-semibold mb-4 text-center text-gray-900 dark:text-gray-100">
             Daily Reminders
           </h2>
           <NotificationButton />
-        </div>
-
-        {/* Placeholder for future calendar */}
-        <div className="text-center text-gray-500 dark:text-gray-400 text-sm">
-          <p>Calendar view coming soon...</p>
         </div>
       </div>
     </main>

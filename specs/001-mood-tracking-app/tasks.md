@@ -118,13 +118,13 @@ Using Next.js App Router structure from plan.md:
 - [x] T040 [P] [US3] Create Calendar component in src/components/Calendar.tsx
 - [x] T041 [P] [US3] Create DayCell component for individual calendar days in src/components/DayCell.tsx
 - [x] T042 [P] [US3] Create API route GET /api/ratings?month=YYYY-MM in src/app/api/ratings/route.ts
-- [ ] T043 [US3] Implement calendar grid generation using date-fns (eachDayOfInterval, startOfMonth, endOfMonth)
-- [ ] T044 [US3] Add calendar to page below today's rating in src/app/page.tsx
-- [ ] T045 [US3] Implement emoji rendering on rated days in DayCell
-- [ ] T046 [US3] Add empty/neutral state for unrated days
-- [ ] T047 [US3] Implement today highlighting in calendar grid
-- [ ] T048 [US3] Add visual distinction for future dates (grayed out, non-interactive)
-- [ ] T049 [US3] Add month and year label display (e.g., "December 2025")
+- [x] T043 [US3] Implement calendar grid generation using date-fns (eachDayOfInterval, startOfMonth, endOfMonth)
+- [x] T044 [US3] Add calendar to page below today's rating in src/app/page.tsx
+- [x] T045 [US3] Implement emoji rendering on rated days in DayCell
+- [x] T046 [US3] Add empty/neutral state for unrated days
+- [x] T047 [US3] Implement today highlighting in calendar grid
+- [x] T048 [US3] Add visual distinction for future dates (grayed out, non-interactive)
+- [x] T049 [US3] Add month and year label display (e.g., "December 2025")
 
 **Checkpoint**: Users can now see their mood patterns in a monthly calendar view
 
@@ -182,16 +182,16 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 6
 
-- [ ] T068 [P] [US6] Create push notification helper functions in src/lib/push.ts
-- [ ] T069 [P] [US6] Create API route POST /api/push/subscribe in src/app/api/push/subscribe/route.ts
-- [ ] T070 [P] [US6] Create API route POST /api/push/unsubscribe in src/app/api/push/unsubscribe/route.ts
-- [ ] T071 [P] [US6] Create Azure Function Timer Trigger in azure-functions/daily-reminder/function.json
-- [ ] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
-- [ ] T073 [US6] Add permission request UI component in src/app/page.tsx
-- [ ] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
-- [ ] T075 [US6] Store push subscription in database via /api/push/subscribe
-- [ ] T076 [US6] Implement notification sending in Azure Function using web-push
-- [ ] T077 [US6] Add notification click handler in Service Worker to open app
+- [x] T068 [P] [US6] Create push notification helper functions in src/lib/push.ts
+- [x] T069 [P] [US6] Create API route POST /api/push/subscribe in src/app/api/push/subscribe/route.ts
+- [x] T070 [P] [US6] Create API route POST /api/push/unsubscribe in src/app/api/push/unsubscribe/route.ts
+- [x] T071 [P] [US6] Create Azure Function Timer Trigger in azure-functions/daily-reminder/function.json
+- [x] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
+- [x] T073 [US6] Add permission request UI component in src/app/page.tsx
+- [x] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
+- [x] T075 [US6] Store push subscription in database via /api/push/subscribe
+- [x] T076 [US6] Implement notification sending in Azure Function using web-push
+- [x] T077 [US6] Add notification click handler in Service Worker to open app
 - [ ] T078 [US6] Test notification at 9 PM CST (2 AM UTC) using Timer Trigger schedule
 
 **Checkpoint**: Users receive daily reminders and can tap to rate their day
