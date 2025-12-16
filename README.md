@@ -6,6 +6,15 @@ A personal mood tracking application built with Next.js 16, featuring emoji-base
 ![React](https://img.shields.io/badge/React-19.2-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.1+-blue)
 ![Tailwind](https://img.shields.io/badge/Tailwind-4.0-38bdf8)
+![Deployment](https://img.shields.io/badge/Deployment-Production-green)
+
+## Live Application
+
+🚀 **Production**: [https://mood-tracker.slingshotgrp.com](https://mood-tracker.slingshotgrp.com)
+
+**Status**: ✅ Deployed and operational
+**Last Updated**: 2025-12-16
+**Version**: 1.0.0
 
 ## Quick Start
 
@@ -36,6 +45,7 @@ For detailed setup instructions, see [Quickstart Guide](specs/001-mood-tracking-
 Rate Your Day helps you track your daily emotional state with minimal effort. Simply tap an emoji (😠 😢 😐 😊) to record how your day went, add optional notes, and view your mood patterns over time in a beautiful calendar interface.
 
 **Core Features:**
+
 - One-tap daily mood rating (4 emoji scale)
 - Monthly calendar view showing mood patterns
 - Optional notes for each day (280 characters)
@@ -45,16 +55,16 @@ Rate Your Day helps you track your daily emotional state with minimal effort. Si
 
 ## Tech Stack
 
-| Layer | Technology | Why? |
-|-------|-----------|------|
-| Framework | Next.js 16 + React 19.2 | App Router, Server Components, Turbopack |
-| Language | TypeScript 5.1+ | Type safety throughout |
-| Styling | Tailwind CSS 4.0 | Utility-first, 5x faster builds |
-| Database | Azure Cosmos DB (MongoDB API) | Serverless, pay-per-request |
-| ORM | Prisma 7 | TypeScript-based, Rust-free |
-| Auth | Microsoft Entra ID | SSO via NextAuth.js |
-| Hosting | Vercel Pro | First-party Next.js support |
-| Scheduler | Azure Functions | Timer Trigger for notifications |
+| Layer     | Technology                    | Why?                                     |
+| --------- | ----------------------------- | ---------------------------------------- |
+| Framework | Next.js 16 + React 19.2       | App Router, Server Components, Turbopack |
+| Language  | TypeScript 5.1+               | Type safety throughout                   |
+| Styling   | Tailwind CSS 4.0              | Utility-first, 5x faster builds          |
+| Database  | Azure Cosmos DB (MongoDB API) | Serverless, pay-per-request              |
+| ORM       | Prisma 7                      | TypeScript-based, Rust-free              |
+| Auth      | Microsoft Entra ID            | SSO via NextAuth.js                      |
+| Hosting   | Vercel Pro                    | First-party Next.js support              |
+| Scheduler | Azure Functions               | Timer Trigger for notifications          |
 
 See [ADR 001: Framework Selection](docs/adr/001-framework-selection.md) and [ADR 002: Infrastructure](docs/adr/002-infrastructure.md) for detailed rationale.
 
@@ -82,16 +92,16 @@ rate-your-day/
 
 ## Documentation
 
-| Document | Purpose |
-|----------|---------|
-| [CLAUDE.md](CLAUDE.md) | Project guide for AI assistants |
-| [Quickstart Guide](specs/001-mood-tracking-app/quickstart.md) | 10-minute setup instructions |
-| [Feature Specification](specs/001-mood-tracking-app/spec.md) | Complete requirements (8 user stories) |
-| [Implementation Plan](specs/001-mood-tracking-app/plan.md) | Technical architecture |
-| [Task Breakdown](specs/001-mood-tracking-app/tasks.md) | 115 tasks organized by story |
-| [Agent Execution Plan](specs/001-mood-tracking-app/agent-execution-plan.md) | Parallel implementation strategy |
-| [Data Model](specs/001-mood-tracking-app/data-model.md) | Prisma schema & query patterns |
-| [API Specification](specs/001-mood-tracking-app/contracts/api-spec.yaml) | OpenAPI 3.0 REST API docs |
+| Document                                                                    | Purpose                                |
+| --------------------------------------------------------------------------- | -------------------------------------- |
+| [CLAUDE.md](CLAUDE.md)                                                      | Project guide for AI assistants        |
+| [Quickstart Guide](specs/001-mood-tracking-app/quickstart.md)               | 10-minute setup instructions           |
+| [Feature Specification](specs/001-mood-tracking-app/spec.md)                | Complete requirements (8 user stories) |
+| [Implementation Plan](specs/001-mood-tracking-app/plan.md)                  | Technical architecture                 |
+| [Task Breakdown](specs/001-mood-tracking-app/tasks.md)                      | 115 tasks organized by story           |
+| [Agent Execution Plan](specs/001-mood-tracking-app/agent-execution-plan.md) | Parallel implementation strategy       |
+| [Data Model](specs/001-mood-tracking-app/data-model.md)                     | Prisma schema & query patterns         |
+| [API Specification](specs/001-mood-tracking-app/contracts/api-spec.yaml)    | OpenAPI 3.0 REST API docs              |
 
 ## Development
 
@@ -106,8 +116,11 @@ npm run type-check
 npm run lint
 
 # Tests
-npm test                 # Unit tests
+npm test                 # Unit tests (coming soon)
 npm run test:e2e         # E2E tests (Playwright)
+npm run test:e2e:ui      # E2E tests with interactive UI
+npm run test:e2e:headed  # E2E tests in headed mode (see browser)
+npm run test:e2e:report  # View test report
 
 # Database
 npx prisma studio        # Browse data
@@ -117,6 +130,22 @@ npx prisma generate      # Regenerate client
 # Build
 npm run build            # Production build
 npm start                # Start production server
+```
+
+### E2E Testing
+
+Comprehensive E2E tests with Playwright covering:
+
+- **Rating Flow**: Mood selection, notes, validation, persistence
+- **Calendar**: Navigation, day selection, modal interactions
+- **Offline**: Caching, sync, offline functionality
+
+```bash
+# First-time setup
+npx playwright install
+
+# Run tests
+npm run test:e2e
 ```
 
 ## Architecture
@@ -226,27 +255,58 @@ See [Quickstart](specs/001-mood-tracking-app/quickstart.md#azure-functions-deplo
 
 ## User Stories
 
-| Priority | User Story | Status |
-|----------|-----------|--------|
-| P1 | Quick Daily Mood Rating | 📋 Planned |
-| P2 | Add Context Notes | 📋 Planned |
-| P2 | View Monthly Mood Patterns | 📋 Planned |
-| P3 | Navigate Historical Data | 📋 Planned |
-| P3 | Review and Edit Past Days | 📋 Planned |
-| P3 | Receive Daily Reminder | 📋 Planned |
-| P4 | Offline Mood Tracking | 📋 Planned |
-| P4 | Install as Standalone App | 📋 Planned |
+| Priority | User Story                 | Status      |
+| -------- | -------------------------- | ----------- |
+| P1       | Quick Daily Mood Rating    | ✅ Complete |
+| P2       | Add Context Notes          | ✅ Complete |
+| P2       | View Monthly Mood Patterns | ✅ Complete |
+| P3       | Navigate Historical Data   | ✅ Complete |
+| P3       | Review and Edit Past Days  | ✅ Complete |
+| P3       | Receive Daily Reminder     | ✅ Complete |
+| P4       | Offline Mood Tracking      | ✅ Complete |
+| P4       | Install as Standalone App  | ✅ Complete |
+
+**Implementation Progress**: 115/115 tasks complete (100%)
 
 See [Feature Specification](specs/001-mood-tracking-app/spec.md) for complete acceptance criteria.
+
+## Accessibility & Performance
+
+### Accessibility (WCAG 2.1 AA Compliant)
+
+- ✅ **ARIA labels** on all interactive elements
+- ✅ **Keyboard navigation** with arrow keys and Tab
+- ✅ **Color contrast** exceeds WCAG AA standards (most meet AAA)
+- ✅ **Screen reader friendly** with semantic HTML
+- ✅ **Focus indicators** clearly visible
+- ✅ **Dark mode** support with accessible color schemes
+
+See [Color Contrast Analysis](docs/accessibility/color-contrast-analysis.md) for detailed WCAG compliance report.
+
+### Performance
+
+**Target**: < 2 second load time
+
+Optimizations implemented:
+
+- Next.js 16 with Turbopack (5x faster builds)
+- React 19.2 with improved compiler
+- Tailwind CSS 4.0 (5x faster builds)
+- Service Worker with aggressive caching
+- Minimal JavaScript bundle (< 150 KB)
+- Server Components where appropriate
+- Code splitting and lazy loading
+
+See [Lighthouse Audit Guide](docs/performance/lighthouse-audit-guide.md) for performance analysis.
 
 ## Browser Support
 
 | Browser | Minimum Version |
-|---------|-----------------|
-| Chrome | 111+ |
-| Edge | 111+ |
-| Firefox | 128+ |
-| Safari | 16.4+ |
+| ------- | --------------- |
+| Chrome  | 111+            |
+| Edge    | 111+            |
+| Firefox | 128+            |
+| Safari  | 16.4+           |
 
 ## Cost Estimate
 
