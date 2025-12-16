@@ -24,9 +24,13 @@ cd rate-your-day
 
 ```bash
 npm install
+
+# Install Playwright browsers for E2E testing
+npx playwright install
 ```
 
 Expected packages:
+
 - next@16.x
 - react@19.2
 - typescript@5.1+
@@ -60,6 +64,7 @@ VAPID_SUBJECT="mailto:your-email@example.com"
 ```
 
 **Generate VAPID Keys**:
+
 ```bash
 npx web-push generate-vapid-keys
 ```
@@ -94,7 +99,7 @@ az cosmosdb keys list \
 # Create app registration
 az ad app create \
   --display-name "Rate Your Day" \
-  --web-redirect-uris "http://localhost:3000/api/auth/callback/azure-ad" \
+  --web-redirect-uris "http://localhost:3000/api/auth/callback/microsoft-entra-id" \
   --sign-in-audience AzureADMyOrg
 
 # Note the appId (CLIENT_ID) from output
@@ -140,8 +145,11 @@ rate-your-day/
 # Unit tests (Jest)
 npm test
 
-# E2E tests (Playwright)
-npm run test:e2e
+# E2E tests (Playwright) - Phase 11
+npm run test:e2e           # Run all E2E tests
+npm run test:e2e:ui        # Interactive UI mode
+npm run test:e2e:headed    # See browser during tests
+npm run test:e2e:report    # View test report
 
 # Watch mode
 npm test -- --watch
@@ -198,6 +206,7 @@ npm start
 7. All subsequent requests include session cookie
 
 **Test Authentication**:
+
 ```bash
 # Visit app
 open http://localhost:3000
@@ -259,6 +268,7 @@ func azure functionapp publish func-rate-your-day-reminder
 ```
 
 **Configure Environment Variables** in Azure Portal:
+
 - `DATABASE_URL`
 - `VAPID_PUBLIC_KEY`
 - `VAPID_PRIVATE_KEY`
@@ -281,6 +291,7 @@ vercel
 ### Environment Variables
 
 Add all `.env.local` variables in Vercel Dashboard:
+
 - Project Settings → Environment Variables
 - Add production values
 - Redeploy
@@ -302,6 +313,7 @@ open https://rate-your-day.vercel.app
 **Error**: `MongoServerError: Authentication failed`
 
 **Solution**:
+
 - Verify `DATABASE_URL` includes `?retryWrites=false`
 - Check connection string from Azure Portal
 - Ensure IP allowed in Cosmos DB firewall
@@ -311,6 +323,7 @@ open https://rate-your-day.vercel.app
 **Error**: Redirect loop or "unauthorized"
 
 **Solution**:
+
 - Verify `OWNER_EMAIL` matches your Microsoft account
 - Check `NEXTAUTH_URL` matches current URL
 - Regenerate `NEXTAUTH_SECRET`
@@ -320,6 +333,7 @@ open https://rate-your-day.vercel.app
 **Error**: VAPID keys invalid
 
 **Solution**:
+
 - Regenerate VAPID keys: `npx web-push generate-vapid-keys`
 - Update both `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and `VAPID_PRIVATE_KEY`
 - Clear browser cache and resubscribe
@@ -329,6 +343,7 @@ open https://rate-your-day.vercel.app
 **Error**: `Module not found` or TypeScript errors
 
 **Solution**:
+
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json

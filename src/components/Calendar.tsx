@@ -123,18 +123,24 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Month and Year Header with Navigation */}
-      <div className="mb-6 flex items-center justify-between">
+      <div
+        className="mb-6 flex items-center justify-between"
+        role="group"
+        aria-label="Calendar navigation"
+      >
         {/* Previous Month Button */}
         <button
           onClick={goToPreviousMonth}
           className="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          aria-label="Previous month"
+          aria-label={`Go to ${format(subMonths(currentMonth, 1), 'MMMM yyyy')}`}
+          title="Previous month"
         >
           <svg
             className="w-5 h-5 text-gray-600 dark:text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -146,7 +152,12 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
         </button>
 
         {/* Month and Year Label */}
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+        <h2
+          id="calendar-month-label"
+          className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
 
@@ -155,14 +166,20 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
           onClick={goToNextMonth}
           disabled={isCurrentMonth}
           className="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-gray-800"
-          aria-label="Next month"
+          aria-label={
+            isCurrentMonth
+              ? 'Cannot navigate to future months'
+              : `Go to ${format(addMonths(currentMonth, 1), 'MMMM yyyy')}`
+          }
           aria-disabled={isCurrentMonth}
+          title={isCurrentMonth ? 'Current month' : 'Next month'}
         >
           <svg
             className="w-5 h-5 text-gray-600 dark:text-gray-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
@@ -179,30 +196,46 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
       {/* Calendar Grid */}
       <div className="card-elevated p-5 sm:p-6">
         {/* Week day headers */}
-        <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-3">
-          {weekDays.map((day) => (
+        <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-3" role="row">
+          {weekDays.map((day, index) => (
             <div
               key={day}
+              role="columnheader"
+              aria-label={
+                ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][
+                  index
+                ]
+              }
               className="text-center text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-500 py-2"
             >
-              {day}
+              <span aria-hidden="true">{day}</span>
             </div>
           ))}
         </div>
 
         {/* Loading skeleton */}
         {isLoading ? (
-          <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+          <div
+            className="grid grid-cols-7 gap-1.5 sm:gap-2"
+            aria-label="Loading calendar"
+            aria-busy="true"
+          >
             {Array.from({ length: 35 }).map((_, index) => (
               <div
                 key={index}
                 className="aspect-square rounded-xl bg-gray-100 dark:bg-gray-800 shimmer"
+                role="presentation"
               />
             ))}
           </div>
         ) : (
           /* Calendar days grid */
-          <div className="grid grid-cols-7 gap-1.5 sm:gap-2" role="grid">
+          <div
+            className="grid grid-cols-7 gap-1.5 sm:gap-2"
+            role="grid"
+            aria-labelledby="calendar-month-label"
+            aria-readonly="false"
+          >
             {calendarDays.map((date) => {
               const dateString = format(date, 'yyyy-MM-dd')
               const rating = ratings[dateString]

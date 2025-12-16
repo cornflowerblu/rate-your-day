@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import { MoodLevel, MOOD_EMOJIS } from '@/lib/types'
 
 interface MoodSelectorProps {
@@ -13,17 +14,67 @@ export default function MoodSelector({
   onMoodSelect,
   disabled = false,
 }: MoodSelectorProps) {
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Handle keyboard navigation (arrow keys)
+  const handleKeyDown = (e: React.KeyboardEvent, currentLevel: MoodLevel) => {
+    if (disabled) return
+
+    let newLevel: MoodLevel | null = null
+
+    switch (e.key) {
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        e.preventDefault()
+        // Move to previous mood (with wrapping)
+        newLevel = currentLevel === 1 ? 4 : ((currentLevel - 1) as MoodLevel)
+        break
+      case 'ArrowRight':
+      case 'ArrowDown':
+        e.preventDefault()
+        // Move to next mood (with wrapping)
+        newLevel = currentLevel === 4 ? 1 : ((currentLevel + 1) as MoodLevel)
+        break
+      case 'Home':
+        e.preventDefault()
+        newLevel = 1
+        break
+      case 'End':
+        e.preventDefault()
+        newLevel = 4
+        break
+      default:
+        return
+    }
+
+    // Focus the new button
+    if (newLevel !== null) {
+      const newIndex = newLevel - 1
+      buttonRefs.current[newIndex]?.focus()
+    }
+  }
+
   return (
-    <div className="flex gap-3 sm:gap-4 justify-center items-center flex-wrap">
-      {[1, 2, 3, 4].map((level) => {
+    <div
+      ref={containerRef}
+      className="flex gap-3 sm:gap-4 justify-center items-center flex-wrap"
+      role="group"
+      aria-label="Mood rating selector"
+    >
+      {[1, 2, 3, 4].map((level, index) => {
         const mood = MOOD_EMOJIS[level as MoodLevel]
         const isSelected = selectedMood === level
 
         return (
           <button
             key={level}
+            ref={(el) => {
+              buttonRefs.current[index] = el
+            }}
             type="button"
             onClick={() => onMoodSelect(level as MoodLevel)}
+            onKeyDown={(e) => handleKeyDown(e, level as MoodLevel)}
             disabled={disabled}
             className={`
               group relative
@@ -38,8 +89,9 @@ export default function MoodSelector({
               ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer active:scale-95'}
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
             `}
-            aria-label={`Rate your day as ${mood.label}`}
+            aria-label={`Rate your day as ${mood.label}, ${level} out of 4`}
             aria-pressed={isSelected}
+            tabIndex={0}
           >
             <span
               className={`
@@ -49,6 +101,7 @@ export default function MoodSelector({
               `}
               role="img"
               aria-label={mood.label}
+              aria-hidden="false"
             >
               {mood.emoji}
             </span>
@@ -69,6 +122,7 @@ export default function MoodSelector({
               <div
                 className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 h-1.5 rounded-full animate-fade-in shadow-md"
                 style={{ backgroundColor: mood.color }}
+                aria-hidden="true"
               />
             )}
           </button>

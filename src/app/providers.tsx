@@ -2,6 +2,7 @@
 
 import { SessionProvider } from 'next-auth/react'
 import { useEffect } from 'react'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // Register service worker for offline support, push notifications, and PWA installation
@@ -40,5 +41,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  return <SessionProvider>{children}</SessionProvider>
+  return (
+    <ErrorBoundary>
+      <SessionProvider>{children}</SessionProvider>
+    </ErrorBoundary>
+  )
 }

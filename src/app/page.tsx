@@ -324,42 +324,56 @@ export default function Home() {
 
       <div className="max-w-5xl mx-auto">
         {/* Header with Sign Out and Install Button */}
-        <div className="relative mb-8 sm:mb-12">
-          <div className="absolute top-0 right-0 flex items-center gap-3">
+        <header className="relative mb-8 sm:mb-12">
+          <nav className="absolute top-0 right-0 flex items-center gap-3" aria-label="User actions">
             <InstallButton />
             <SignOutButton />
-          </div>
+          </nav>
           <div className="text-center space-y-3">
             <h1 className="text-5xl sm:text-6xl font-black mb-3 bg-gradient-to-r from-primary-600 to-purple-600 dark:from-primary-400 dark:to-purple-400 bg-clip-text text-transparent tracking-tight animate-fade-in">
               Rate Your Day
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-medium flex items-center justify-center gap-2">
-              <svg className="w-5 h-5 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg
+                className="w-5 h-5 text-primary-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
                 <path
                   fillRule="evenodd"
                   d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                   clipRule="evenodd"
                 />
               </svg>
-              <span>{todayFormatted}</span>
+              <time dateTime={today}>{todayFormatted}</time>
             </p>
           </div>
-        </div>
+        </header>
 
         {/* Error/Success Messages */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl shadow-sm animate-slide-in-down">
+          <div
+            className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl shadow-sm animate-slide-in-down"
+            role="alert"
+            aria-live="assertive"
+          >
             <p className="text-red-800 dark:text-red-200 text-center font-medium">{error}</p>
           </div>
         )}
 
         {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl shadow-sm animate-slide-in-down">
+          <div
+            className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl shadow-sm animate-slide-in-down"
+            role="status"
+            aria-live="polite"
+          >
             <div className="flex items-center justify-center gap-2">
               <svg
                 className="w-5 h-5 text-green-600 dark:text-green-400"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"
@@ -373,8 +387,14 @@ export default function Home() {
         )}
 
         {/* Mood Selection */}
-        <div className="card-elevated mb-12 animate-fade-in">
-          <h2 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100 tracking-tight">
+        <section
+          className="card-elevated mb-12 animate-fade-in"
+          aria-labelledby="today-rating-heading"
+        >
+          <h2
+            id="today-rating-heading"
+            className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100 tracking-tight"
+          >
             {selectedMood ? 'How was your day?' : "How's your day going?"}
           </h2>
 
@@ -424,12 +444,20 @@ export default function Home() {
               />
             </div>
           )}
-        </div>
+        </section>
 
         {/* Monthly Calendar View */}
-        <div className="mb-12 animate-fade-in">
-          <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-3">
-            <svg className="w-8 h-8 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+        <section className="mb-12 animate-fade-in" aria-labelledby="calendar-section-heading">
+          <h2
+            id="calendar-section-heading"
+            className="text-3xl font-bold mb-8 text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-3"
+          >
+            <svg
+              className="w-8 h-8 text-primary-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path
                 fillRule="evenodd"
                 d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -439,23 +467,34 @@ export default function Home() {
             <span>Your Mood Calendar</span>
           </h2>
           <Calendar key={calendarRefreshKey} onDayClick={handleDayClick} />
-        </div>
+        </section>
 
         {/* Notification Settings */}
-        <div className="card-elevated mb-12 animate-fade-in">
-          <h2 className="text-2xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100 tracking-tight flex items-center justify-center gap-2">
-            <svg className="w-6 h-6 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+        <section
+          className="card-elevated mb-12 animate-fade-in"
+          aria-labelledby="notifications-heading"
+        >
+          <h2
+            id="notifications-heading"
+            className="text-2xl font-bold mb-8 text-center text-gray-900 dark:text-gray-100 tracking-tight flex items-center justify-center gap-2"
+          >
+            <svg
+              className="w-6 h-6 text-primary-500"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
             </svg>
             <span>Daily Reminders</span>
           </h2>
           <NotificationButton />
-        </div>
+        </section>
 
         {/* Footer */}
-        <div className="text-center py-8 text-sm text-gray-500 dark:text-gray-500">
+        <footer className="text-center py-8 text-sm text-gray-500 dark:text-gray-500">
           <p>Made with ❤️ for tracking your daily moods</p>
-        </div>
+        </footer>
       </div>
 
       {/* Day Detail Modal for viewing/editing past days */}

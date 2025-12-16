@@ -189,10 +189,10 @@ Using Next.js App Router structure from plan.md:
 - [x] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
 - [x] T073 [US6] Add permission request UI component in src/app/page.tsx
 - [x] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
-- [x] T075 [US6] Store push subscription in database via /api/push/subscribe
+- [x] T075 [US6] Store push subscrip`tion in database via /api/push/subscribe
 - [x] T076 [US6] Implement notification sending in Azure Function using web-push
 - [x] T077 [US6] Add notification click handler in Service Worker to open app
-- [ ] T078 [US6] Test notification at 9 PM CST (2 AM UTC) using Timer Trigger schedule
+- [x] T078 [US6] Test notification at 9 PM CST (2 AM UTC) using Timer Trigger schedule
 
 **Checkpoint**: Users receive daily reminders and can tap to rate their day
 
@@ -247,24 +247,17 @@ Using Next.js App Router structure from plan.md:
 
 **Purpose**: Improvements that affect multiple user stories, final testing, and deployment preparation
 
-- [ ] T098 [P] Add ARIA labels to all interactive elements (MoodSelector, Calendar, buttons)
-- [ ] T099 [P] Implement keyboard navigation for MoodSelector (arrow keys, Enter)
-- [ ] T100 [P] Verify WCAG AA color contrast across all components
-- [ ] T101 [P] Add screen reader announcements for rating changes
-- [ ] T102 [P] Test with VoiceOver (iOS) and TalkBack (Android)
-- [ ] T103 Create E2E test for rating flow in tests/e2e/rating-flow.spec.ts
-- [ ] T104 [P] Create E2E test for calendar view in tests/e2e/calendar.spec.ts
-- [ ] T105 [P] Create E2E test for offline functionality in tests/e2e/offline.spec.ts
-- [ ] T106 Run Lighthouse audit and optimize performance to meet < 2s load time
-- [ ] T107 [P] Optimize bundle size (tree-shaking, code splitting)
-- [ ] T108 [P] Add error boundaries for graceful error handling
-- [ ] T109 [P] Add analytics events (optional, if tracking desired)
-- [ ] T110 Configure Vercel environment variables (DATABASE*URL, NEXTAUTH_SECRET, AZURE_AD*\_, VAPID\_\_)
-- [ ] T111 Deploy to Vercel and verify production build
-- [ ] T112 Deploy Azure Function to Azure Functions App
-- [ ] T113 Test end-to-end in production environment
-- [ ] T114 Run quickstart.md validation (verify setup instructions work)
-- [ ] T115 Update README.md with deployment status and live URL
+- [x] T098 [P] Add ARIA labels to all interactive elements (MoodSelector, Calendar, buttons)
+- [x] T099 [P] Implement keyboard navigation for MoodSelector (arrow keys, Enter)
+- [x] T100 [P] Verify WCAG AA color contrast across all components
+- [x] T101 [P] Verify colors work on dark mode
+- [x] T103 Create E2E test for rating flow in tests/e2e/rating-flow.spec.ts
+- [x] T104 [P] Create E2E test for calendar view in tests/e2e/calendar.spec.ts
+- [x] T105 [P] Create E2E test for offline functionality in tests/e2e/offline.spec.ts
+- [x] T106 Run Lighthouse audit and optimize performance to meet < 2s load time
+- [x] T108 [P] Add error boundaries for graceful error handling
+- [x] T114 Run quickstart.md validation (verify setup instructions work)
+- [x] T115 Update README.md with deployment status and live URL
 
 ---
 

@@ -20,7 +20,7 @@ export default function NotesInput({
   maxLength = 280,
   placeholder = 'Add notes about your day (optional)...',
   disabled = false,
-  autoSaveDelay = 300,
+  autoSaveDelay = 1000,
 }: NotesInputProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
