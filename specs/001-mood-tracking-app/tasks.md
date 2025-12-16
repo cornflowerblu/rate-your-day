@@ -138,14 +138,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 4
 
-- [ ] T050 [US4] Add month navigation state management in Calendar component
-- [ ] T051 [US4] Create previous month button in Calendar component
-- [ ] T052 [US4] Create next month button in Calendar component
-- [ ] T053 [US4] Implement previous month navigation logic (update month state, fetch ratings)
-- [ ] T054 [US4] Implement next month navigation logic with future month prevention
-- [ ] T055 [US4] Update month/year label when navigating
-- [ ] T056 [US4] Add loading state during month data fetching
-- [ ] T057 [US4] Disable next button when on current month
+- [x] T050 [US4] Add month navigation state management in Calendar component
+- [x] T051 [US4] Create previous month button in Calendar component
+- [x] T052 [US4] Create next month button in Calendar component
+- [x] T053 [US4] Implement previous month navigation logic (update month state, fetch ratings)
+- [x] T054 [US4] Implement next month navigation logic with future month prevention
+- [x] T055 [US4] Update month/year label when navigating
+- [x] T056 [US4] Add loading state during month data fetching
+- [x] T057 [US4] Disable next button when on current month
 
 **Checkpoint**: Users can browse their historical mood data across any past month
 

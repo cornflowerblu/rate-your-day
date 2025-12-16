@@ -9,6 +9,9 @@ import {
   startOfWeek,
   endOfWeek,
   isSameMonth,
+  addMonths,
+  subMonths,
+  isAfter,
 } from 'date-fns'
 import DayCell from './DayCell'
 import { MoodLevel } from '@/lib/types'
@@ -91,16 +94,79 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
     fetchRatings()
   }, [currentMonth])
 
+  // Month navigation handlers
+  const goToPreviousMonth = () => {
+    setCurrentMonth((prev) => subMonths(prev, 1))
+  }
+
+  const goToNextMonth = () => {
+    const nextMonth = addMonths(currentMonth, 1)
+    const today = new Date()
+
+    // Prevent navigation to future months
+    if (isAfter(startOfMonth(nextMonth), startOfMonth(today))) {
+      return
+    }
+
+    setCurrentMonth(nextMonth)
+  }
+
+  // Check if we're viewing the current month (disable next button)
+  const isCurrentMonth = useMemo(() => {
+    const today = new Date()
+    return isSameMonth(currentMonth, today)
+  }, [currentMonth])
+
   // Days of week header (Sunday - Saturday)
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Month and Year Header */}
+      {/* Month and Year Header with Navigation */}
       <div className="mb-6 flex items-center justify-between">
+        {/* Previous Month Button */}
+        <button
+          onClick={goToPreviousMonth}
+          className="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          aria-label="Previous month"
+        >
+          <svg
+            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        {/* Month and Year Label */}
         <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
+
+        {/* Next Month Button */}
+        <button
+          onClick={goToNextMonth}
+          disabled={isCurrentMonth}
+          className="flex items-center justify-center w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-white dark:disabled:hover:bg-gray-800"
+          aria-label="Next month"
+          aria-disabled={isCurrentMonth}
+        >
+          <svg
+            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       {/* Error message */}
