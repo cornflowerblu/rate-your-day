@@ -309,7 +309,7 @@ export async function dailyReminderHttp(
 
 // Register Timer Trigger (scheduled)
 app.timer('dailyReminderTimer', {
-  schedule: '0 0 3 * * *', // 3 AM UTC = 9 PM CST
+  schedule: '0 35 16 * * *', // 4:35 PM UTC = 10:35 AM CST (TESTING)
   handler: dailyReminderTimer,
 })
 

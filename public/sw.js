@@ -191,6 +191,9 @@ self.addEventListener('push', (event) => {
         title: 'Dismiss',
       },
     ],
+    // Android notification priority - makes it pop up instead of silent
+    silent: false,
+    renotify: true,
   }
 
   event.waitUntil(self.registration.showNotification(data.title || 'Rate Your Day', options))

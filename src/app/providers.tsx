@@ -10,6 +10,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
       navigator.serviceWorker
         .register('/sw.js')
         .then((registration) => {
+          // Handle service worker updates silently (no Chrome notification)
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New service worker available - log but don't notify user
+                  console.log('Service worker updated in background')
+                  // Optionally: You could show a subtle in-app banner here instead
+                }
+              })
+            }
+          })
+
           // Check for updates every hour (production only)
           if (process.env.NODE_ENV === 'production') {
             setInterval(
