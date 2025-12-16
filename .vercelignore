@@ -1,0 +1,22 @@
+# Azure Functions directory - deployed separately to Azure
+azure-functions/
+
+# Specification and documentation files
+specs/
+docs/
+*.md
+!README.md
+
+# Test files
+tests/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Development files
+.env.local.example
+SPEC.md
+IMPLEMENTATION_*.md
+INTEGRATION_GUIDE.md
+API_CONTRACT.md

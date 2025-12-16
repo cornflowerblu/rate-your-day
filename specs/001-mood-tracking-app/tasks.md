@@ -72,15 +72,15 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 1
 
-- [ ] T023 [P] [US1] Create MoodSelector component in src/components/MoodSelector.tsx
-- [ ] T024 [P] [US1] Create API route GET /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
-- [ ] T025 [US1] Create API route POST /api/ratings/[date] for upserting ratings in src/app/api/ratings/[date]/route.ts
-- [ ] T026 [US1] Implement today's date display and rating view in src/app/page.tsx
-- [ ] T027 [US1] Add immediate save logic on emoji click in MoodSelector component
-- [ ] T028 [US1] Add visual feedback for selected emoji (highlight state)
-- [ ] T029 [US1] Implement rating change functionality (tap different emoji)
-- [ ] T030 [US1] Add loading state while saving rating
-- [ ] T031 [US1] Add error handling for failed saves with user feedback
+- [x] T023 [P] [US1] Create MoodSelector component in src/components/MoodSelector.tsx
+- [x] T024 [P] [US1] Create API route GET /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
+- [x] T025 [US1] Create API route POST /api/ratings/[date] for upserting ratings in src/app/api/ratings/[date]/route.ts
+- [x] T026 [US1] Implement today's date display and rating view in src/app/page.tsx
+- [x] T027 [US1] Add immediate save logic on emoji click in MoodSelector component
+- [x] T028 [US1] Add visual feedback for selected emoji (highlight state)
+- [x] T029 [US1] Implement rating change functionality (tap different emoji)
+- [x] T030 [US1] Add loading state while saving rating
+- [x] T031 [US1] Add error handling for failed saves with user feedback
 
 **Checkpoint**: At this point, User Story 1 should be fully functional - users can rate their day and see the rating persist
 
@@ -94,14 +94,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 2
 
-- [ ] T032 [P] [US2] Create NotesInput component with character counter in src/components/NotesInput.tsx
-- [ ] T033 [US2] Implement debounced auto-save hook using use-debounce in NotesInput
-- [ ] T034 [US2] Update POST /api/ratings/[date] to accept notes field
-- [ ] T035 [US2] Add notes field to today's page view in src/app/page.tsx below MoodSelector
-- [ ] T036 [US2] Implement 280 character limit with input validation
-- [ ] T037 [US2] Add character count display (e.g., "45/280")
-- [ ] T038 [US2] Add visual feedback during auto-save (e.g., "Saving..." indicator)
-- [ ] T039 [US2] Handle paste events that exceed 280 characters (truncate)
+- [x] T032 [P] [US2] Create NotesInput component with character counter in src/components/NotesInput.tsx
+- [x] T033 [US2] Implement debounced auto-save hook using use-debounce in NotesInput
+- [x] T034 [US2] Update POST /api/ratings/[date] to accept notes field
+- [x] T035 [US2] Add notes field to today's page view in src/app/page.tsx below MoodSelector
+- [x] T036 [US2] Implement 280 character limit with input validation
+- [x] T037 [US2] Add character count display (e.g., "45/280")
+- [x] T038 [US2] Add visual feedback during auto-save (e.g., "Saving..." indicator)
+- [x] T039 [US2] Handle paste events that exceed 280 characters (truncate)
 
 **Checkpoint**: Users can now add notes to their ratings with automatic saving
 
@@ -115,16 +115,16 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 3
 
-- [ ] T040 [P] [US3] Create Calendar component in src/components/Calendar.tsx
-- [ ] T041 [P] [US3] Create DayCell component for individual calendar days in src/components/DayCell.tsx
-- [ ] T042 [P] [US3] Create API route GET /api/ratings?month=YYYY-MM in src/app/api/ratings/route.ts
-- [ ] T043 [US3] Implement calendar grid generation using date-fns (eachDayOfInterval, startOfMonth, endOfMonth)
-- [ ] T044 [US3] Add calendar to page below today's rating in src/app/page.tsx
-- [ ] T045 [US3] Implement emoji rendering on rated days in DayCell
-- [ ] T046 [US3] Add empty/neutral state for unrated days
-- [ ] T047 [US3] Implement today highlighting in calendar grid
-- [ ] T048 [US3] Add visual distinction for future dates (grayed out, non-interactive)
-- [ ] T049 [US3] Add month and year label display (e.g., "December 2025")
+- [x] T040 [P] [US3] Create Calendar component in src/components/Calendar.tsx
+- [x] T041 [P] [US3] Create DayCell component for individual calendar days in src/components/DayCell.tsx
+- [x] T042 [P] [US3] Create API route GET /api/ratings?month=YYYY-MM in src/app/api/ratings/route.ts
+- [x] T043 [US3] Implement calendar grid generation using date-fns (eachDayOfInterval, startOfMonth, endOfMonth)
+- [x] T044 [US3] Add calendar to page below today's rating in src/app/page.tsx
+- [x] T045 [US3] Implement emoji rendering on rated days in DayCell
+- [x] T046 [US3] Add empty/neutral state for unrated days
+- [x] T047 [US3] Implement today highlighting in calendar grid
+- [x] T048 [US3] Add visual distinction for future dates (grayed out, non-interactive)
+- [x] T049 [US3] Add month and year label display (e.g., "December 2025")
 
 **Checkpoint**: Users can now see their mood patterns in a monthly calendar view
 
@@ -138,14 +138,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 4
 
-- [ ] T050 [US4] Add month navigation state management in Calendar component
-- [ ] T051 [US4] Create previous month button in Calendar component
-- [ ] T052 [US4] Create next month button in Calendar component
-- [ ] T053 [US4] Implement previous month navigation logic (update month state, fetch ratings)
-- [ ] T054 [US4] Implement next month navigation logic with future month prevention
-- [ ] T055 [US4] Update month/year label when navigating
-- [ ] T056 [US4] Add loading state during month data fetching
-- [ ] T057 [US4] Disable next button when on current month
+- [x] T050 [US4] Add month navigation state management in Calendar component
+- [x] T051 [US4] Create previous month button in Calendar component
+- [x] T052 [US4] Create next month button in Calendar component
+- [x] T053 [US4] Implement previous month navigation logic (update month state, fetch ratings)
+- [x] T054 [US4] Implement next month navigation logic with future month prevention
+- [x] T055 [US4] Update month/year label when navigating
+- [x] T056 [US4] Add loading state during month data fetching
+- [x] T057 [US4] Disable next button when on current month
 
 **Checkpoint**: Users can browse their historical mood data across any past month
 
@@ -159,16 +159,16 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 5
 
-- [ ] T058 [P] [US5] Create DayDetailModal component in src/components/DayDetailModal.tsx
-- [ ] T059 [P] [US5] Create API route DELETE /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
-- [ ] T060 [US5] Add click handler to DayCell for rated days
-- [ ] T061 [US5] Implement modal open/close state management
-- [ ] T062 [US5] Display selected day's date, rating, and notes in modal
-- [ ] T063 [US5] Add MoodSelector to modal for editing rating
-- [ ] T064 [US5] Add NotesInput to modal for editing notes
-- [ ] T065 [US5] Implement save on rating/notes change in modal
-- [ ] T066 [US5] Add close/dismiss button to return to calendar
-- [ ] T067 [US5] Update calendar display when modal closes (refresh ratings)
+- [x] T058 [P] [US5] Create DayDetailModal component in src/components/DayDetailModal.tsx
+- [x] T059 [P] [US5] Create API route DELETE /api/ratings/[date] in src/app/api/ratings/[date]/route.ts
+- [x] T060 [US5] Add click handler to DayCell for rated days
+- [x] T061 [US5] Implement modal open/close state management
+- [x] T062 [US5] Display selected day's date, rating, and notes in modal
+- [x] T063 [US5] Add MoodSelector to modal for editing rating
+- [x] T064 [US5] Add NotesInput to modal for editing notes
+- [x] T065 [US5] Implement save on rating/notes change in modal
+- [x] T066 [US5] Add close/dismiss button to return to calendar
+- [x] T067 [US5] Update calendar display when modal closes (refresh ratings)
 
 **Checkpoint**: Users can review and edit any past day's rating and notes
 
@@ -182,16 +182,16 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 6
 
-- [ ] T068 [P] [US6] Create push notification helper functions in src/lib/push.ts
-- [ ] T069 [P] [US6] Create API route POST /api/push/subscribe in src/app/api/push/subscribe/route.ts
-- [ ] T070 [P] [US6] Create API route POST /api/push/unsubscribe in src/app/api/push/unsubscribe/route.ts
-- [ ] T071 [P] [US6] Create Azure Function Timer Trigger in azure-functions/daily-reminder/function.json
-- [ ] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
-- [ ] T073 [US6] Add permission request UI component in src/app/page.tsx
-- [ ] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
-- [ ] T075 [US6] Store push subscription in database via /api/push/subscribe
-- [ ] T076 [US6] Implement notification sending in Azure Function using web-push
-- [ ] T077 [US6] Add notification click handler in Service Worker to open app
+- [x] T068 [P] [US6] Create push notification helper functions in src/lib/push.ts
+- [x] T069 [P] [US6] Create API route POST /api/push/subscribe in src/app/api/push/subscribe/route.ts
+- [x] T070 [P] [US6] Create API route POST /api/push/unsubscribe in src/app/api/push/unsubscribe/route.ts
+- [x] T071 [P] [US6] Create Azure Function Timer Trigger in azure-functions/daily-reminder/function.json
+- [x] T072 [US6] Implement Azure Function logic to check for unrated days in azure-functions/daily-reminder/index.ts
+- [x] T073 [US6] Add permission request UI component in src/app/page.tsx
+- [x] T074 [US6] Implement client-side subscription logic (register service worker, subscribe to push)
+- [x] T075 [US6] Store push subscription in database via /api/push/subscribe
+- [x] T076 [US6] Implement notification sending in Azure Function using web-push
+- [x] T077 [US6] Add notification click handler in Service Worker to open app
 - [ ] T078 [US6] Test notification at 9 PM CST (2 AM UTC) using Timer Trigger schedule
 
 **Checkpoint**: Users receive daily reminders and can tap to rate their day
@@ -230,14 +230,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 8
 
-- [ ] T090 [US8] Configure manifest.ts with correct name, icons, and standalone display
-- [ ] T091 [US8] Add theme color meta tag in src/app/layout.tsx
-- [ ] T092 [US8] Configure Service Worker for install prompt
-- [ ] T093 [US8] Test install prompt on Chrome (desktop and mobile)
-- [ ] T094 [US8] Test install on Safari (iOS 15+)
-- [ ] T095 [US8] Verify standalone mode (no browser chrome)
-- [ ] T096 [US8] Verify app icon displays correctly on home screen
-- [ ] T097 [US8] Test all functionality in installed app mode
+- [x] T090 [US8] Configure manifest.ts with correct name, icons, and standalone display
+- [x] T091 [US8] Add theme color meta tag in src/app/layout.tsx
+- [x] T092 [US8] Configure Service Worker for install prompt
+- [x] T093 [US8] Test install prompt on Chrome (desktop and mobile)
+- [x] T094 [US8] Test install on Safari (iOS 15+)
+- [x] T095 [US8] Verify standalone mode (no browser chrome)
+- [x] T096 [US8] Verify app icon displays correctly on home screen
+- [x] T097 [US8] Test all functionality in installed app mode
 
 **Checkpoint**: Users can install and use the app as a standalone application
 

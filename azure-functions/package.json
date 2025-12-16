@@ -1,0 +1,28 @@
+{
+  "name": "rate-your-day-azure-functions",
+  "version": "1.0.0",
+  "description": "Azure Functions for Rate Your Day - Daily reminder notifications",
+  "main": "dist/functions/*.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prestart": "npm run build",
+    "start": "func start",
+    "test": "echo \"No tests specified\""
+  },
+  "dependencies": {
+    "mongoose": "^9.0.1",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "@azure/functions": "^4.0.0",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^20",
+    "@types/web-push": "^3.6.4",
+    "typescript": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
