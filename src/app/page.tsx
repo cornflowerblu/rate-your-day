@@ -9,6 +9,7 @@ import OfflineIndicator from '@/components/OfflineIndicator'
 import NotificationButton from '@/components/NotificationButton'
 import DayDetailModal from '@/components/DayDetailModal'
 import { SignOutButton } from '@/components/SignOutButton'
+import { InstallButton } from '@/components/InstallButton'
 import { MoodLevel, RatingResponse } from '@/lib/types'
 import { savePendingRating, getCachedRating, cacheRating, isOnline } from '@/lib/offline-db'
 
@@ -322,9 +323,10 @@ export default function Home() {
       <OfflineIndicator />
 
       <div className="max-w-5xl mx-auto">
-        {/* Header with Sign Out Button */}
+        {/* Header with Sign Out and Install Button */}
         <div className="relative mb-8 sm:mb-12">
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-0 right-0 flex items-center gap-3">
+            <InstallButton />
             <SignOutButton />
           </div>
           <div className="text-center space-y-3">

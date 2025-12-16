@@ -230,14 +230,14 @@ Using Next.js App Router structure from plan.md:
 
 ### Implementation for User Story 8
 
-- [ ] T090 [US8] Configure manifest.ts with correct name, icons, and standalone display
-- [ ] T091 [US8] Add theme color meta tag in src/app/layout.tsx
-- [ ] T092 [US8] Configure Service Worker for install prompt
-- [ ] T093 [US8] Test install prompt on Chrome (desktop and mobile)
-- [ ] T094 [US8] Test install on Safari (iOS 15+)
-- [ ] T095 [US8] Verify standalone mode (no browser chrome)
-- [ ] T096 [US8] Verify app icon displays correctly on home screen
-- [ ] T097 [US8] Test all functionality in installed app mode
+- [x] T090 [US8] Configure manifest.ts with correct name, icons, and standalone display
+- [x] T091 [US8] Add theme color meta tag in src/app/layout.tsx
+- [x] T092 [US8] Configure Service Worker for install prompt
+- [x] T093 [US8] Test install prompt on Chrome (desktop and mobile)
+- [x] T094 [US8] Test install on Safari (iOS 15+)
+- [x] T095 [US8] Verify standalone mode (no browser chrome)
+- [x] T096 [US8] Verify app icon displays correctly on home screen
+- [x] T097 [US8] Test all functionality in installed app mode
 
 **Checkpoint**: Users can install and use the app as a standalone application
 
