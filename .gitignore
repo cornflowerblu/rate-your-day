@@ -58,3 +58,4 @@ Thumbs.db
 *.log
 *.tmp
 scripts/PRODUCTION_DATABASE_URL.txt
+.playwright-mcp/*.png
