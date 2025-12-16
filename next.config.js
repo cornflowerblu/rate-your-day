@@ -3,30 +3,10 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/.*\.vercel\.app\/api\/.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'api-cache',
-        expiration: {
-          maxEntries: 64,
-          maxAgeSeconds: 24 * 60 * 60, // 24 hours
-        },
-      },
-    },
-    {
-      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'image-cache',
-        expiration: {
-          maxEntries: 64,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-        },
-      },
-    },
-  ],
+  // Use custom service worker
+  sw: 'sw.js',
+  // Disable workbox since we have custom service worker
+  disableDevLogs: true,
 })
 
 /** @type {import('next').NextConfig} */
