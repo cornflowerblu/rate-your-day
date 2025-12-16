@@ -1,18 +1,21 @@
 // Service Worker for Rate Your Day PWA
 // Enhanced with offline support and background sync
 
-const CACHE_VERSION = 'v3'
+const CACHE_VERSION = 'v4'
 const CACHE_NAME = `rate-your-day-${CACHE_VERSION}`
 const STATIC_CACHE_NAME = `rate-your-day-static-${CACHE_VERSION}`
 const API_CACHE_NAME = `rate-your-day-api-${CACHE_VERSION}`
 
 // Assets to cache on install
+// Only include assets that:
+// 1. Definitely exist
+// 2. Don't require authentication
+// 3. Are static files (not dynamically generated)
 const STATIC_ASSETS = [
-  '/',
   '/offline.html',
-  '/manifest.json',
   '/icons/icon-192x192.svg',
   '/icons/icon-512x512.svg',
+  '/favicon.svg',
 ]
 
 self.addEventListener('install', (event) => {
