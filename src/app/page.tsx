@@ -333,7 +333,7 @@ export default function Home() {
             <h1 className="text-5xl sm:text-6xl font-black mb-3 bg-gradient-to-r from-primary-600 to-purple-600 dark:from-primary-400 dark:to-purple-400 bg-clip-text text-transparent tracking-tight animate-fade-in">
               Rate Your Day
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 font-medium flex items-center justify-center gap-2">
+            <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 font-medium flex items-center justify-center gap-2">
               <svg
                 className="w-5 h-5 text-primary-500"
                 fill="currentColor"
@@ -412,7 +412,7 @@ export default function Home() {
           )}
 
           {selectedMood && !isSaving && (
-            <p className="mt-6 text-center text-gray-600 dark:text-gray-400 text-sm font-medium flex items-center justify-center gap-2">
+            <p className="mt-6 text-center text-gray-600 dark:text-gray-300 text-sm font-medium flex items-center justify-center gap-2">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -430,7 +430,7 @@ export default function Home() {
             <div className="mt-10 pt-10 border-t border-gray-200 dark:border-gray-700 animate-fade-in">
               <h3 className="text-xl font-bold mb-5 text-gray-900 dark:text-gray-100">
                 Add Notes{' '}
-                <span className="text-gray-500 dark:text-gray-500 font-normal text-base">
+                <span className="text-gray-500 dark:text-gray-400 font-normal text-base">
                   (Optional)
                 </span>
               </h3>
@@ -492,7 +492,7 @@ export default function Home() {
         </section>
 
         {/* Footer */}
-        <footer className="text-center py-8 text-sm text-gray-500 dark:text-gray-500">
+        <footer className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
           <p>Made with ❤️ for tracking your daily moods</p>
         </footer>
       </div>

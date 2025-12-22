@@ -167,9 +167,11 @@ button {
   box-shadow: var(--shadow-soft);
 }
 
-.dark .card {
-  background: rgb(17 24 39);
-  border-color: rgb(31 41 55);
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: rgb(17 24 39);
+    border-color: rgb(31 41 55);
+  }
 }
 
 .card-elevated {
@@ -186,9 +188,11 @@ button {
   }
 }
 
-.dark .card-elevated {
-  background: rgb(17 24 39);
-  border-color: rgb(31 41 55);
+@media (prefers-color-scheme: dark) {
+  .card-elevated {
+    background: rgb(17 24 39);
+    border-color: rgb(31 41 55);
+  }
 }
 
 .btn {
@@ -239,13 +243,15 @@ button {
   background: rgb(209 213 219);
 }
 
-.dark .btn-secondary {
-  background: rgb(55 65 81);
-  color: rgb(243 244 246);
-}
+@media (prefers-color-scheme: dark) {
+  .btn-secondary {
+    background: rgb(55 65 81);
+    color: rgb(243 244 246);
+  }
 
-.dark .btn-secondary:hover:not(:disabled) {
-  background: rgb(75 85 99);
+  .btn-secondary:hover:not(:disabled) {
+    background: rgb(75 85 99);
+  }
 }
 
 .btn-ghost {
@@ -257,12 +263,14 @@ button {
   background: rgb(243 244 246);
 }
 
-.dark .btn-ghost {
-  color: rgb(209 213 219);
-}
+@media (prefers-color-scheme: dark) {
+  .btn-ghost {
+    color: rgb(209 213 219);
+  }
 
-.dark .btn-ghost:hover:not(:disabled) {
-  background: rgb(31 41 55);
+  .btn-ghost:hover:not(:disabled) {
+    background: rgb(31 41 55);
+  }
 }
 
 .input {
@@ -291,14 +299,16 @@ button {
   cursor: not-allowed;
 }
 
-.dark .input {
-  border-color: rgb(75 85 99);
-  background: rgb(31 41 55);
-  color: rgb(243 244 246);
-}
+@media (prefers-color-scheme: dark) {
+  .input {
+    border-color: rgb(75 85 99);
+    background: rgb(31 41 55);
+    color: rgb(243 244 246);
+  }
 
-.dark .input::placeholder {
-  color: rgb(107 114 128);
+  .input::placeholder {
+    color: rgb(107 114 128);
+  }
 }
 
 .badge {
@@ -317,9 +327,11 @@ button {
   color: rgb(21 128 61);
 }
 
-.dark .badge-success {
-  background: rgb(21 128 61 / 0.2);
-  color: rgb(134 239 172);
+@media (prefers-color-scheme: dark) {
+  .badge-success {
+    background: rgb(21 128 61 / 0.2);
+    color: rgb(134 239 172);
+  }
 }
 
 .badge-error {
@@ -327,9 +339,11 @@ button {
   color: rgb(185 28 28);
 }
 
-.dark .badge-error {
-  background: rgb(185 28 28 / 0.2);
-  color: rgb(252 165 165);
+@media (prefers-color-scheme: dark) {
+  .badge-error {
+    background: rgb(185 28 28 / 0.2);
+    color: rgb(252 165 165);
+  }
 }
 
 /* Utility classes */
@@ -345,13 +359,15 @@ button {
     animation: shimmer 2s infinite;
   }
 
-  .dark .shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.05) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
+  @media (prefers-color-scheme: dark) {
+    .shimmer {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
   }
 
   .glass {
@@ -360,8 +376,10 @@ button {
     -webkit-backdrop-filter: blur(10px);
   }
 
-  .dark .glass {
-    background: rgba(10, 10, 10, 0.8);
+  @media (prefers-color-scheme: dark) {
+    .glass {
+      background: rgba(10, 10, 10, 0.8);
+    }
   }
 }
 

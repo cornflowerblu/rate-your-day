@@ -136,7 +136,7 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
           title="Previous month"
         >
           <svg
-            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            className="w-5 h-5 text-gray-600 dark:text-gray-300"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -175,7 +175,7 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
           title={isCurrentMonth ? 'Current month' : 'Next month'}
         >
           <svg
-            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+            className="w-5 h-5 text-gray-600 dark:text-gray-300"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -206,7 +206,7 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
                   index
                 ]
               }
-              className="text-center text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-500 py-2"
+              className="text-center text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 py-2"
             >
               <span aria-hidden="true">{day}</span>
             </div>
@@ -256,7 +256,7 @@ export default function Calendar({ initialMonth = new Date(), onDayClick }: Cale
       </div>
 
       {/* Legend */}
-      <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
