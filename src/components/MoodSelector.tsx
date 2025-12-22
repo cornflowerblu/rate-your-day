@@ -112,7 +112,7 @@ export default function MoodSelector({
                 ${
                   isSelected
                     ? 'text-gray-900 dark:text-gray-100'
-                    : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200'
+                    : 'text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-200'
                 }
               `}
             >
